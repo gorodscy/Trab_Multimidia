@@ -47,9 +47,7 @@ void send_blocks(struct colors color, FILE* file){
                     }
                 }
 
-                vectorization(blue);
-                vectorization(green);
-                vectorization(red);
+                vectorization_colors(blue, green, red);
             }
         }
         // Libera a mamória da struct (que foi criada ao abrir a imagem)

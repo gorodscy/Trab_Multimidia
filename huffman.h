@@ -35,6 +35,7 @@ typedef struct _huffman_tree_t {
  *	@var root The root of the tree.
  *	@return Return an array of all the tree nodes.
  */
+ // create with elements matrix at run_length.h
 huffman_tree_t** ht_create(buffer_t buffer, huffman_tree_t **root);
 
 /**

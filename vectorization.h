@@ -51,7 +51,7 @@ void vectorization_colors(unsigned char blue[8][8], unsigned char green[8][8], u
 	vred = vectorization(red);
 
 	// send the information to the run-length encoding
-	
+	run_length(vblue);
 
 }
 
@@ -83,7 +83,6 @@ int** revert_vectorization(int *vet) {
 			x++;
 		}
 	}
-
 
 	return mat;
 }
