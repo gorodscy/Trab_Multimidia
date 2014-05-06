@@ -11,8 +11,7 @@
 #ifndef _MULTIMEDIA_HUFFMAN_H_
 #define _MULTIMEDIA_HUFFMAN_H_
 
-#include "includes.h"
-#include "bitstream.h"
+#include "open_image.h"
 
 #define HUFFMAN_TYPE_NODE 0
 #define HUFFMAN_TYPE_LEAF 1
@@ -51,7 +50,7 @@ void ht_destroy(huffman_tree_t **symbols, huffman_tree_t *root);
  *	@var bs Bit stream where the encoded data will be written.
  *	@return How many bits were written (no flush is performed).
  */
-uint16_t ht_encode(huffman_tree_t **symbols, char input, bitstream_t *bs);
+unsigned short int ht_encode(huffman_tree_t **symbols, char input, int /*bitstream_t*/ *bs);
 
 /**
  *	Decode a byte from the given stream.
@@ -60,6 +59,6 @@ uint16_t ht_encode(huffman_tree_t **symbols, char input, bitstream_t *bs);
  *	@var bs Bit stream where the encoded data relies.
  *	@return How many bits were read.
  */
-uint16_t ht_decode(huffman_tree_t *root, char &output, bitstream_t *bs);
+unsigned short int ht_decode(huffman_tree_t *root, char output, int /*bitstream_t*/ *bs);
 
 #endif

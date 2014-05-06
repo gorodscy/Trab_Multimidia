@@ -12,21 +12,7 @@
 #include "run_length.h"
 
 
-
-void vectorization_colors(unsigned char blue[8][8], unsigned char green[8][8], unsigned char red[8][8]) {
-
-	unsigned char vblue[64], vgreen[64], vred[64];
-
-	vblue = vectorization(blue);
-	vgreen = vectorization(green);
-	vred = vectorization(red);
-
-	// send the information to the run-length encoding
-	
-
-}
-
-void vectorization(unsigned char mat[8][8]) {
+unsigned char * vectorization(unsigned char mat[8][8]) {
 	int x = 0;
 	unsigned char *vet;
 
@@ -55,6 +41,19 @@ void vectorization(unsigned char mat[8][8]) {
 	return vet;
 }
 
+
+void vectorization_colors(unsigned char blue[8][8], unsigned char green[8][8], unsigned char red[8][8]) {
+
+	unsigned char *vblue, *vgreen, *vred;
+
+	vblue = vectorization(blue);
+	vgreen = vectorization(green);
+	vred = vectorization(red);
+
+	// send the information to the run-length encoding
+	
+
+}
 
 // revert the vectorization
 int** revert_vectorization(int *vet) {

@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "prepare_blocks.h"
+#include "huffman.h"
 
 // 
 int main(int argc, char** argv)
