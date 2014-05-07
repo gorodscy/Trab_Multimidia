@@ -6,16 +6,16 @@ int ht_qsort_compare(const void *a, const void *b) {
 	return (int)(ha->count - hb->count);
 }
 
-void ht_qsort(huffman_tree_t* q[]) {
-	qsort(q, 256, sizeof(huffman_tree_t*), ht_qsort_compare);
+void ht_qsort(huffman_tree_t* q[], int buffer_size) {
+	qsort(q, buffer_size, sizeof(huffman_tree_t*), ht_qsort_compare);
 }
 
-huffman_tree_t** ht_create(buffer_t buffer, huffman_tree_t **root) {
-	huffman_tree_t **symbols = (huffman_tree_t**)calloc(256, sizeof(huffman_tree_t*));
-	huffman_tree_t **priorityQueue = (huffman_tree_t**)calloc(256, sizeof(huffman_tree_t*));
+huffman_tree_t** ht_create(buffer_t* buffer, int buffer_size, huffman_tree_t **root); {
+	huffman_tree_t **symbols = (huffman_tree_t**)calloc(buffer_size, sizeof(huffman_tree_t*));
+	huffman_tree_t **priorityQueue = (huffman_tree_t**)calloc(buffer_size, sizeof(huffman_tree_t*));
 
 	// create a leaf for each symbol and add it to the priority queue.
-	for ( int i = 0; i < 256; i++ ) {
+	for ( int i = 0; i < buffer_size; i++ ) {
 		huffman_tree_t *node = (huffman_tree_t*)malloc(sizeof(huffman_tree_t));
 		node->count = buffer[i];
 		node->type = HUFFMAN_TYPE_LEAF;
@@ -25,9 +25,9 @@ huffman_tree_t** ht_create(buffer_t buffer, huffman_tree_t **root) {
 	}
 
 	// sort the queue starting with the highest frequencies (count field, actually).
-	ht_qsort(priorityQueue);
+	ht_qsort(priorityQueue, buffer_size);
 
-	char lastNodeIndex = 255;
+	char lastNodeIndex = buffer_size-1;
 	/*
 	 * 	The least frequent symbols are the last ones.
 	 *	Let's replace them with a node, so that they become childs of the node.
@@ -76,9 +76,9 @@ void ht_destroy(huffman_tree_t **symbols, huffman_tree_t *root) {
 	MM_FREE(symbols);
 }
 
-unsigned short int ht_encode(huffman_tree_t **symbols, char input, int /*bitstream_t*/ *bs) {
+unsigned short int ht_encode(huffman_tree_t **symbols, int buffer_size, char input, int /*bitstream_t*/ *bs) {
 	unsigned short int length = 0;
-	bool bits[256];
+	bool bits[buffer_size];
 
 	huffman_tree_t *symbol;
 	huffman_tree_t *parent;

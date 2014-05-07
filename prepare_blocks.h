@@ -50,6 +50,8 @@ void send_blocks(struct colors color, FILE* file){
                 vectorization_colors(blue, green, red);
             }
         }
+        huffman_tree_t root;
+        huffman_tree_t** ht = call_huffman(&root);
         // Libera a mamória da struct (que foi criada ao abrir a imagem)
         free(color.red);
         free(color.blue);

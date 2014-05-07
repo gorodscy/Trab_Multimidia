@@ -16,8 +16,7 @@
 #define HUFFMAN_TYPE_NODE 0
 #define HUFFMAN_TYPE_LEAF 1
 
-typedef unsigned long long int buffer_element_t;
-typedef buffer_element_t buffer_t[256];
+typedef unsigned short int buffer_t;
 
 typedef struct _huffman_tree_t {
 	int count;									// how many ocurrences this node or leaf has.
@@ -36,7 +35,7 @@ typedef struct _huffman_tree_t {
  *	@return Return an array of all the tree nodes.
  */
  // create with elements matrix at run_length.h
-huffman_tree_t** ht_create(buffer_t buffer, huffman_tree_t **root);
+huffman_tree_t** ht_create(buffer_t* buffer, int buffer_size, huffman_tree_t **root);
 
 /**
  *	Destroy a Huffman Tree.
@@ -51,7 +50,7 @@ void ht_destroy(huffman_tree_t **symbols, huffman_tree_t *root);
  *	@var bs Bit stream where the encoded data will be written.
  *	@return How many bits were written (no flush is performed).
  */
-unsigned short int ht_encode(huffman_tree_t **symbols, char input, int /*bitstream_t*/ *bs);
+unsigned short int ht_encode(huffman_tree_t **symbols, int buffer_size, char input, int /*bitstream_t*/ *bs);
 
 /**
  *	Decode a byte from the given stream.

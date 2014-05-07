@@ -8,8 +8,10 @@
  * Run length encoding
  */
 
- #include "open_image.h"
- #include <math.h>
+#include "open_image.h"
+#include "huffman.h"
+#include "save_bits.h"
+#include <math.h>
 
 
 unsigned short int elements[9][65] = {0}; // initialize huffman elements with 0
@@ -56,4 +58,13 @@ void run_length(unsigned char* vet) {
 	for(int i = 0; i <= j; i++)
 		elements[table[1][i]][table[2][i]]++;
 
+}
+
+huffman_tree_t** call_huffman(huffman_tree_t* root;) {
+    // Grava a lista de frequencia no arquivo para poder
+    // recontruir a arvore na hora de decode
+    
+    // grava_bits(elements_size);
+    // grava_bits(elements);
+    return ht_create(elements, 65, &root);
 }

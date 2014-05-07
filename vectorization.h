@@ -52,6 +52,8 @@ void vectorization_colors(unsigned char blue[8][8], unsigned char green[8][8], u
 
 	// send the information to the run-length encoding
 	run_length(vblue);
+    run_length(vgreen);
+    run_length(vred);
 
 }
 
