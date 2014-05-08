@@ -14,7 +14,7 @@
 #include <math.h>
 
 
-unsigned short int elements[9][65] = {0}; // initialize huffman elements with 0
+buffer_t elements[65] = {0}; // initialize huffman elements with 0
 
 int number_of_bits(int number) {
 	if(number == 0)
@@ -31,7 +31,7 @@ int number_of_bits(int number) {
 }
 
 
-void run_length(unsigned char* vet) {
+void run_length(unsigned char* vet, huffman_tree_t** ht, FILE* file) {
 
 	// create a table with number, number of bits and repetition
 	int table[3][64];
@@ -54,17 +54,28 @@ void run_length(unsigned char* vet) {
 			ant = vet[i];
 		}
 	}
-
-	for(int i = 0; i <= j; i++)
-		elements[table[1][i]][table[2][i]]++;
+    
+    if (ht != nil && file != nil) {
+        for(int i = 0; i <= j; i++) {
+            int rep_huffman;
+            buffer_t size = ht_encode(ht, 65, table[2][i], &rep_huffman);
+            write_byte(file, (unsigned char) rep_huffman, size);
+            unsigned char nbits = (unsigned char) table[1][i];
+            write_byte(file, nbits, bit_size_of(table[1][i]));
+            unsigned char value = (unsigned char) table[0][i];
+            write_byte(file, value, bit_size_of(table[0][i]));
+        }
+    }
+    else {
+        for(int i = 0; i <= j; i++)
+            elements[table[2][i]]++;
+    }
 
 }
 
-huffman_tree_t** call_huffman(huffman_tree_t* root;) {
+huffman_tree_t** call_huffman(huffman_tree_t* root, FILE* file) {
     // Grava a lista de frequencia no arquivo para poder
     // recontruir a arvore na hora de decode
-    
-    // grava_bits(elements_size);
-    // grava_bits(elements);
-    return ht_create(elements, 65, &root);
+    fwrite(elements, 65, sizeof(buffer_t), file);
+    return (ht_create(elements, 65, &root));
 }

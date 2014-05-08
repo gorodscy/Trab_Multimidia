@@ -50,7 +50,7 @@ void ht_destroy(huffman_tree_t **symbols, huffman_tree_t *root);
  *	@var bs Bit stream where the encoded data will be written.
  *	@return How many bits were written (no flush is performed).
  */
-unsigned short int ht_encode(huffman_tree_t **symbols, int buffer_size, char input, int /*bitstream_t*/ *bs);
+buffer_t ht_encode(huffman_tree_t **symbols, int buffer_size, char input, int /*bitstream_t*/ *bs);
 
 /**
  *	Decode a byte from the given stream.
@@ -59,6 +59,6 @@ unsigned short int ht_encode(huffman_tree_t **symbols, int buffer_size, char inp
  *	@var bs Bit stream where the encoded data relies.
  *	@return How many bits were read.
  */
-unsigned short int ht_decode(huffman_tree_t *root, char output, int /*bitstream_t*/ *bs);
+buffer_t ht_decode(huffman_tree_t *root, char &output, int /*bitstream_t*/ *bs);
 
 #endif

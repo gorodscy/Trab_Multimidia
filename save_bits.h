@@ -36,7 +36,7 @@ void getSize(FILE* file, int* width, int* height){
 #endif
 }
 
-// Verifica e completa o byte
+// Pega o tamanho em bits do "byte"
 int bit_size_of(int byte){
     
     int i;

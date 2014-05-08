@@ -47,11 +47,30 @@ void send_blocks(struct colors color, FILE* file){
                     }
                 }
 
-                vectorization_colors(blue, green, red);
+                vectorization_colors(nil, nil, blue, green, red);
             }
         }
         huffman_tree_t root;
-        huffman_tree_t** ht = call_huffman(&root);
+        huffman_tree_t** ht = call_huffman(&root, file);
+        
+        // Separa a imagem em blocos de 8x8 bits para cada cor novamente
+        for(offsetLARG=0; offsetLARG<color.larg; offsetLARG+=8)
+        {
+            for(offsetALT=0; offsetALT<color.alt; offsetALT+=8)
+            {
+                for (i=offsetLARG; i<offsetLARG+8; i++)
+                {
+                    for (j=offsetALT; j<offsetALT+8; j++)
+                    {
+                        blue[i%8][j%8] = color.blue[i][j];
+                        green[i%8][j%8] = color.green[i][j];
+                        red[i%8][j%8] = color.red[i][j];
+                    }
+                }
+                
+                vectorization_colors(ht, file, blue, green, red);
+            }
+        }
         // Libera a mamória da struct (que foi criada ao abrir a imagem)
         free(color.red);
         free(color.blue);
