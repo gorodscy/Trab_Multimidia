@@ -59,6 +59,6 @@ buffer_t ht_encode(huffman_tree_t **symbols, int buffer_size, char input, int /*
  *	@var bs Bit stream where the encoded data relies.
  *	@return How many bits were read.
  */
-buffer_t ht_decode(huffman_tree_t *root, char &output, int /*bitstream_t*/ *bs);
+buffer_t ht_decode(huffman_tree_t *root, char* output, int /*bitstream_t*/ *bs);
 
 #endif

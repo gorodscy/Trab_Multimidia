@@ -8,6 +8,9 @@
  * Run length encoding
  */
 
+#ifndef _MULTIMEDIA_RUN_LENGTH_H_
+#define _MULTIMEDIA_RUN_LENGTH_H_
+
 #include "open_image.h"
 #include "huffman.h"
 #include "save_bits.h"
@@ -55,7 +58,7 @@ void run_length(unsigned char* vet, huffman_tree_t** ht, FILE* file) {
 		}
 	}
     
-    if (ht != nil && file != nil) {
+    if (ht != NULL && file != NULL) {
         for(int i = 0; i <= j; i++) {
             int rep_huffman;
             buffer_t size = ht_encode(ht, 65, table[2][i], &rep_huffman);
@@ -73,9 +76,12 @@ void run_length(unsigned char* vet, huffman_tree_t** ht, FILE* file) {
 
 }
 
-huffman_tree_t** call_huffman(huffman_tree_t* root, FILE* file) {
+huffman_tree_t** call_huffman(huffman_tree_t** root, FILE* file) {
     // Grava a lista de frequencia no arquivo para poder
     // recontruir a arvore na hora de decode
     fwrite(elements, 65, sizeof(buffer_t), file);
-    return (ht_create(elements, 65, &root));
+    huffman_tree_t** ht = ht_create(elements, 65, root);
+    return ht;
 }
+
+#endif

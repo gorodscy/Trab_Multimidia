@@ -9,8 +9,8 @@
  */
 
 // Evita includes multiplos e repetidos
-#ifndef _prepare_blocks_h
-#define _prepare_blocks_h
+#ifndef _PREPARE_BLOCKS_h
+#define _PREPARE_BLOCKS_h
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -47,11 +47,11 @@ void send_blocks(struct colors color, FILE* file){
                     }
                 }
 
-                vectorization_colors(nil, nil, blue, green, red);
+                vectorization_colors(NULL, NULL, blue, green, red);
             }
         }
-        huffman_tree_t root;
-        huffman_tree_t** ht = call_huffman(&root, file);
+        huffman_tree_t** root;
+        huffman_tree_t** ht = call_huffman(root, file);
         
         // Separa a imagem em blocos de 8x8 bits para cada cor novamente
         for(offsetLARG=0; offsetLARG<color.larg; offsetLARG+=8)

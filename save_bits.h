@@ -8,8 +8,8 @@
  * Gravação de Bits
  */
 
-#ifndef _save_bits_h
-#define _save_bits_h
+#ifndef _SAVE_BITS_h
+#define _SAVE_BITS_h
 
 #include <stdio.h>
 #include <stdlib.h>

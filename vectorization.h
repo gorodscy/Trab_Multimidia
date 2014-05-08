@@ -8,6 +8,9 @@
  * Vetorização
  */
 
+#ifndef _MULTIMEDIA_VECTORIZATION_H_
+#define _MULTIMEDIA_VECTORIZATION_H_
+
 #include "open_image.h"
 #include "run_length.h"
 #include "huffman.h"
@@ -89,3 +92,5 @@ int** revert_vectorization(int *vet) {
 
 	return mat;
 }
+
+#endif

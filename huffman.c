@@ -10,7 +10,7 @@ void ht_qsort(huffman_tree_t* q[], int buffer_size) {
 	qsort(q, buffer_size, sizeof(huffman_tree_t*), ht_qsort_compare);
 }
 
-huffman_tree_t** ht_create(buffer_t* buffer, int buffer_size, huffman_tree_t **root); {
+huffman_tree_t** ht_create(buffer_t* buffer, int buffer_size, huffman_tree_t **root) {
 	huffman_tree_t **symbols = (huffman_tree_t**)calloc(buffer_size, sizeof(huffman_tree_t*));
 	huffman_tree_t **priorityQueue = (huffman_tree_t**)calloc(buffer_size, sizeof(huffman_tree_t*));
 
@@ -102,7 +102,7 @@ unsigned short int ht_encode(huffman_tree_t **symbols, int buffer_size, char inp
 	return length;
 }
 
-unsigned short int ht_decode(huffman_tree_t *root, char &output, int /*bitstream_t*/ *bs) {
+unsigned short int ht_decode(huffman_tree_t *root, char* output, int /*bitstream_t*/ *bs) {
 	bool bit = 0;
 	unsigned short int length = 0;
 
@@ -118,7 +118,7 @@ unsigned short int ht_decode(huffman_tree_t *root, char &output, int /*bitstream
 	}
 
 	// root variable contains our data!
-	output = root->node.value;
+	*output = root->node.value;
 
 	// how many bits we consumed?
 	return length;

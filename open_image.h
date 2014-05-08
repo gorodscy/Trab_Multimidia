@@ -7,15 +7,15 @@
  * 
  * Preparação da Imagem
  */
- 
-#include <stdio.h>
-#include <stdlib.h>
-#include "save_bits.h"
-#include "prepare_blocks.h"
 
 // Evita includes multiplos e repetidos
 #ifndef OPEN_IMAGE_H
 #define OPEN_IMAGE_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "save_bits.h"
+#include "prepare_blocks.h"
 
 #pragma pack(push,2)
 struct bitmap {
