@@ -13,7 +13,6 @@
 
 #include "open_image.h"
 #include "run_length.h"
-#include "huffman.h"
 
 
 unsigned char * vectorization(unsigned char mat[8][8]) {

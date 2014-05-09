@@ -16,6 +16,8 @@
 #include <stdlib.h>
 #include "save_bits.h"
 #include "prepare_blocks.h"
+#include "huffman.h"
+
 
 #pragma pack(push,2)
 struct bitmap {

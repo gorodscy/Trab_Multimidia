@@ -1,17 +1,5 @@
-/*
- * TRABALHO 01
- * Grupo 04:
- * Vanessa Apolinário de Lima
- * Caio Augusto da Silva Gomes
- * Fernando Cury Gorodscy
- * 
- * Biblioteca Código de Huffman
- */
-
 #ifndef _MULTIMEDIA_HUFFMAN_H_
 #define _MULTIMEDIA_HUFFMAN_H_
-
-#include "open_image.h"
 
 #define HUFFMAN_TYPE_NODE 0
 #define HUFFMAN_TYPE_LEAF 1
@@ -28,37 +16,137 @@ typedef struct _huffman_tree_t {
 	} node;
 } huffman_tree_t;
 
-/**
- *	Create a Huffman Tree from the buffer.
- *	@var buffer The buffer with the count of all the bytes.
- *	@var root The root of the tree.
- *	@return Return an array of all the tree nodes.
- */
- // create with elements matrix at run_length.h
-huffman_tree_t** ht_create(buffer_t* buffer, int buffer_size, huffman_tree_t **root);
+int ht_qsort_compare(const void *a, const void *b) {
+	huffman_tree_t *ha = *((huffman_tree_t**)a);
+	huffman_tree_t *hb = *((huffman_tree_t**)b);
+	return (int)(ha->count - hb->count);
+}
 
-/**
- *	Destroy a Huffman Tree.
- *	@var root The root of the tree.
- */
-void ht_destroy(huffman_tree_t **symbols, huffman_tree_t *root);
+void ht_qsort(huffman_tree_t* q[], int buffer_size) {
+	qsort(q, buffer_size, sizeof(huffman_tree_t*), ht_qsort_compare);
+}
 
-/**
- *	Encode a byte, writing it to the specified stream.
- *	@var symbols Array of tree nodes (NOT THE ROOT NODE!).
- *	@var input Byte to be encoded.
- *	@var bs Bit stream where the encoded data will be written.
- *	@return How many bits were written (no flush is performed).
- */
-buffer_t ht_encode(huffman_tree_t **symbols, int buffer_size, char input, int /*bitstream_t*/ *bs);
+huffman_tree_t** ht_create(buffer_t* buffer, int buffer_size, huffman_tree_t **root) {
+	huffman_tree_t **symbols = (huffman_tree_t**)calloc(buffer_size, sizeof(huffman_tree_t*));
+	huffman_tree_t **priorityQueue = (huffman_tree_t**)calloc(buffer_size, sizeof(huffman_tree_t*));
 
-/**
- *	Decode a byte from the given stream.
- *	@var root Root of the tree.
- *	@var output The decoded byte.
- *	@var bs Bit stream where the encoded data relies.
- *	@return How many bits were read.
- */
-buffer_t ht_decode(huffman_tree_t *root, char* output, int /*bitstream_t*/ *bs);
+	// create a leaf for each symbol and add it to the priority queue.
+	for ( int i = 0; i < buffer_size; i++ ) {
+		huffman_tree_t *node = (huffman_tree_t*)malloc(sizeof(huffman_tree_t));
+		node->count = buffer[i];
+		node->type = HUFFMAN_TYPE_LEAF;
+		node->node.value = i;
+		priorityQueue[i] = node;
+		symbols[i] = node;
+	}
+
+	// sort the queue starting with the highest frequencies (count field, actually).
+	ht_qsort(priorityQueue, buffer_size);
+
+	char lastNodeIndex = buffer_size-1;
+	/*
+	 * 	The least frequent symbols are the last ones.
+	 *	Let's replace them with a node, so that they become childs of the node.
+	 *	Repeat until only one node is left. This last node is the root of our tree.
+	 */
+	while ( lastNodeIndex > 0 ) {
+		printf("\n %d - %d\n\n", lastNodeIndex, priorityQueue[0]->count);
+		// take two nodes.
+		huffman_tree_t *last = priorityQueue[lastNodeIndex];
+		huffman_tree_t *almostLast = priorityQueue[lastNodeIndex - 1];
+		lastNodeIndex -= 2;
+		// make a new node.
+		huffman_tree_t *node = (huffman_tree_t*)malloc(sizeof(huffman_tree_t));
+		node->count = last->count + almostLast->count;
+		node->type = HUFFMAN_TYPE_NODE;
+		node->node.childs[0] = almostLast;
+		node->node.childs[1] = last;
+		last->parent = almostLast->parent = node;
+		// insert the new node at the end of the queue.
+		priorityQueue[++lastNodeIndex] = node;
+		// sort the nodes.
+		for ( int i = lastNodeIndex; i > 0 && priorityQueue[i]->count > priorityQueue[i - 1]->count; i-- ) {
+			// swap nodes.
+			huffman_tree_t *temp;
+			temp = priorityQueue[i];
+			priorityQueue[i] = priorityQueue[i - 1];
+			priorityQueue[i - 1] = temp;
+			printf("-----> %d\n", lastNodeIndex);
+		}
+	}
+
+	printf("\n %d - %d\n\n", lastNodeIndex, priorityQueue[0]->count);
+	// believe it or not, we have our tree!
+	*root = priorityQueue[0];
+	//MM_FREE(priorityQueue);
+	free(priorityQueue);
+
+	printf("\ngot out here\n\n");
+
+	return symbols;
+}
+
+void ht_destroy_rec(huffman_tree_t *root) {
+	if ( root->type == HUFFMAN_TYPE_NODE ) {
+		ht_destroy_rec(root->node.childs[0]);
+		ht_destroy_rec(root->node.childs[1]);
+	}
+	//MM_FREE(root);
+	free(root);
+}
+
+void ht_destroy(huffman_tree_t **symbols, huffman_tree_t *root) {
+    ht_destroy_rec(root);
+	//MM_FREE(symbols);
+	free(symbols);
+}
+
+unsigned short int ht_encode(huffman_tree_t **symbols, int buffer_size, char input, int /*bitstream_t*/ *bs) {
+	unsigned short int length = 0;
+	bool bits[buffer_size];
+
+	huffman_tree_t *symbol;
+	huffman_tree_t *parent;
+
+	symbol = symbols[input];
+	parent = symbol->parent;
+
+	// this will fill the bits buffer at the reverse order.
+	while ( parent ) {
+		bits[length] = symbol == parent->node.childs[1];
+		length++;
+		symbol = parent;
+		parent = symbol->parent;
+	}
+
+	// write data at the right order.
+	//for ( int16_t i = (int16_t)length - 1; i >= 0; i-- ) {
+	//	bs_write(bs, bits[i]);
+	//}
+
+	return length;
+}
+
+unsigned short int ht_decode(huffman_tree_t *root, char* output, int /*bitstream_t*/ *bs) {
+	bool bit = 0;
+	unsigned short int length = 0;
+
+	// while we are working on a leaf...
+	while ( root->type == HUFFMAN_TYPE_NODE ) {
+		//if ( !bs_read(bs, bit) ) {
+			// corrupted data!
+		//	return 0;
+		//}
+		// which child should we take a look?
+        root = bit ? root->node.childs[1] : root->node.childs[0];
+        length++;
+	}
+
+	// root variable contains our data!
+	*output = root->node.value;
+
+	// how many bits we consumed?
+	return length;
+}
 
 #endif

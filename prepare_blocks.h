@@ -31,7 +31,7 @@ void send_blocks(struct colors color, FILE* file){
         int x=0, y=0;
         
         setSize(file, color.larg, color.alt);
-        
+        /*
         // Separa a imagem em blocos de 8x8 bits para cada cor
         for(offsetLARG=0; offsetLARG<color.larg; offsetLARG+=8)
         {
@@ -49,9 +49,16 @@ void send_blocks(struct colors color, FILE* file){
 
                 vectorization_colors(NULL, NULL, blue, green, red);
             }
-        }
+        }*/
         huffman_tree_t** root;
-        huffman_tree_t** ht = call_huffman(root, file);
+        buffer_t *abc;
+        abc = (buffer_t*) calloc(5, sizeof(buffer_t));
+        abc[0] = 1;
+        abc[1] = 2;
+        abc[2] = 3;
+        abc[3] = 4;
+        abc[4] = 5;
+        huffman_tree_t** ht = ht_create(abc, 5, root);
         
         // Separa a imagem em blocos de 8x8 bits para cada cor novamente
         for(offsetLARG=0; offsetLARG<color.larg; offsetLARG+=8)
@@ -68,7 +75,7 @@ void send_blocks(struct colors color, FILE* file){
                     }
                 }
                 
-                vectorization_colors(ht, file, blue, green, red);
+                vectorization_colors(root, file, blue, green, red);
             }
         }
         // Libera a mamória da struct (que foi criada ao abrir a imagem)
