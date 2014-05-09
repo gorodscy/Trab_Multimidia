@@ -50,7 +50,7 @@ void send_blocks(struct colors color, FILE* file){
                 vectorization_colors(NULL, NULL, blue, green, red);
             }
         }*/
-        huffman_tree_t** root;
+        huffman_tree_t *root;
         buffer_t *abc;
         abc = (buffer_t*) calloc(5, sizeof(buffer_t));
         abc[0] = 1;
@@ -75,7 +75,7 @@ void send_blocks(struct colors color, FILE* file){
                     }
                 }
                 
-                vectorization_colors(root, file, blue, green, red);
+                vectorization_colors(ht, file, blue, green, red);
             }
         }
         // Libera a mamória da struct (que foi criada ao abrir a imagem)

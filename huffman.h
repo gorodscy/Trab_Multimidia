@@ -1,6 +1,8 @@
 #ifndef _MULTIMEDIA_HUFFMAN_H_
 #define _MULTIMEDIA_HUFFMAN_H_
 
+#include "bitstream.h"
+
 #define HUFFMAN_TYPE_NODE 0
 #define HUFFMAN_TYPE_LEAF 1
 
@@ -26,7 +28,7 @@ void ht_qsort(huffman_tree_t* q[], int buffer_size) {
 	qsort(q, buffer_size, sizeof(huffman_tree_t*), ht_qsort_compare);
 }
 
-huffman_tree_t** ht_create(buffer_t* buffer, int buffer_size, huffman_tree_t **root) {
+huffman_tree_t** ht_create(buffer_t* buffer, int buffer_size, huffman_tree_t *root) {
 	huffman_tree_t **symbols = (huffman_tree_t**)calloc(buffer_size, sizeof(huffman_tree_t*));
 	huffman_tree_t **priorityQueue = (huffman_tree_t**)calloc(buffer_size, sizeof(huffman_tree_t*));
 
@@ -50,7 +52,6 @@ huffman_tree_t** ht_create(buffer_t* buffer, int buffer_size, huffman_tree_t **r
 	 *	Repeat until only one node is left. This last node is the root of our tree.
 	 */
 	while ( lastNodeIndex > 0 ) {
-		printf("\n %d - %d\n\n", lastNodeIndex, priorityQueue[0]->count);
 		// take two nodes.
 		huffman_tree_t *last = priorityQueue[lastNodeIndex];
 		huffman_tree_t *almostLast = priorityQueue[lastNodeIndex - 1];
@@ -71,17 +72,13 @@ huffman_tree_t** ht_create(buffer_t* buffer, int buffer_size, huffman_tree_t **r
 			temp = priorityQueue[i];
 			priorityQueue[i] = priorityQueue[i - 1];
 			priorityQueue[i - 1] = temp;
-			printf("-----> %d\n", lastNodeIndex);
 		}
 	}
 
-	printf("\n %d - %d\n\n", lastNodeIndex, priorityQueue[0]->count);
 	// believe it or not, we have our tree!
-	*root = priorityQueue[0];
+	root = priorityQueue[0];
 	//MM_FREE(priorityQueue);
 	free(priorityQueue);
-
-	printf("\ngot out here\n\n");
 
 	return symbols;
 }
