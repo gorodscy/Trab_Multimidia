@@ -13,7 +13,7 @@ typedef struct _huffman_tree_t {
 	char type;									// is this a leaf or a node?
 	struct _huffman_tree_t *parent;					// parent of this leaf/node.
 	union {
-		char value;								// value of the leaf.
+		int value;								// value of the leaf.
 		struct _huffman_tree_t *childs[2];			// node childs.
 	} node;
 } huffman_tree_t;
