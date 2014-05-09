@@ -98,7 +98,7 @@ void ht_destroy(huffman_tree_t **symbols, huffman_tree_t *root) {
 	free(symbols);
 }
 
-unsigned short int ht_encode(huffman_tree_t **symbols, int buffer_size, char input, int /*bitstream_t*/ *bs) {
+unsigned short int ht_encode(huffman_tree_t **symbols, int buffer_size, char input, bitstream_t *bs) {
 	unsigned short int length = 0;
 	bool bits[buffer_size];
 
@@ -117,23 +117,23 @@ unsigned short int ht_encode(huffman_tree_t **symbols, int buffer_size, char inp
 	}
 
 	// write data at the right order.
-	//for ( int16_t i = (int16_t)length - 1; i >= 0; i-- ) {
-	//	bs_write(bs, bits[i]);
-	//}
+	for ( int16_t i = (int16_t)length - 1; i >= 0; i-- ) {
+		bs_write_bool(bs, bits[i]);
+	}
 
 	return length;
 }
 
-unsigned short int ht_decode(huffman_tree_t *root, char* output, int /*bitstream_t*/ *bs) {
+unsigned short int ht_decode(huffman_tree_t *root, char* output, bitstream_t *bs) {
 	bool bit = 0;
 	unsigned short int length = 0;
 
 	// while we are working on a leaf...
 	while ( root->type == HUFFMAN_TYPE_NODE ) {
-		//if ( !bs_read(bs, bit) ) {
+		if ( !bs_read_bool(bs, &bit) ) {
 			// corrupted data!
-		//	return 0;
-		//}
+			return 0;
+		}
 		// which child should we take a look?
         root = bit ? root->node.childs[1] : root->node.childs[0];
         length++;
