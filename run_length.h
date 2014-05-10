@@ -46,7 +46,7 @@ void run_length(unsigned char* vet, huffman_tree_t** ht, FILE* file) {
 		}
 	}
     
-    if (ht != NULL || file != NULL) {
+    if (ht != NULL && file != NULL) {
         for(int i = 0; i <= j; i++) {
             int rep_huffman;
             buffer_t size = ht_encode(ht, 65, table[2][i], &rep_huffman);
