@@ -60,7 +60,7 @@ void run_length(unsigned char* vet, huffman_tree_t** ht, FILE* file) {
             printf("%d ", value);
             i++;
             if(i==3){
-                printf("\n");
+                printf("\n-----------\n");
                 i=0;
             }
 #endif
@@ -111,8 +111,8 @@ unsigned char* reverse_run_length(FILE* file, huffman_tree_t* root){
         printf("%d ", value);
         w++;
         if(w==3){
-            printf("\n");
-            w=0;
+            printf("\n-----------\n");
+            w = 0;
         }
 #endif
         j = (int) freq;
