@@ -71,7 +71,6 @@ void send_blocks(struct colors color, FILE* file){
                         blue[i%8][j%8] = color.blue[i][j];
                     }
                 }
-                
                 vectorization_colors(ht, file, red, green, blue);
             }
         }

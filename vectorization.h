@@ -46,7 +46,6 @@ unsigned char * vectorization(unsigned char mat[8][8]) {
             x++;
         }
     }
-    
 
 	return vet;
 }
@@ -82,7 +81,6 @@ void revert_vector(unsigned char* vet, unsigned char mat[8][8]) {
 	 		x++;
 	 	}
     }
-    
     for(int k = 0; k < 8; k++) {
         for(int i = k+1; i < 8; i++) {
 	 		if(k%2 == 0) { // subindo
@@ -111,7 +109,7 @@ void revert_vectorization(huffman_tree_t* root, FILE* file, unsigned char red[8]
     revert_vector(vgreen, green);
     revert_vector(vblue, blue);
 
-	return;
+	//return;
 }
 
 #endif
