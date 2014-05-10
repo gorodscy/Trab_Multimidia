@@ -12,7 +12,7 @@
 
 // 
 int main(int argc, char** argv)
-{
+{	
 
 	if(argc < 4) {
 		printf("Missing parameters for the function:\n");

@@ -47,6 +47,7 @@ void run_length(unsigned char* vet, huffman_tree_t** ht, FILE* file) {
     
     if (ht != NULL && file != NULL) {
         for(int i = 0; i <= j; i++) {
+        	printf("value: %d - nnb: %d - rep: %d \n",table[0][i], table[1][i], table[2][i]);
             int rep_huffman;
             buffer_t size = ht_encode(ht, 65, table[2][i], &rep_huffman);
             write_byte(file, (unsigned char) rep_huffman, size);
@@ -116,11 +117,13 @@ unsigned char* reverse_run_length(FILE* file, huffman_tree_t* root){
         }
 #endif
         j = (int) freq;
-        for (i=vet_size; i<j+vet_size; i++) {
+        printf("\n\nfreq - %d, value: %d\n", j, value);
+        for (i=vet_size; i<=j+vet_size; i++) {
             vet[i] = value;
         }
         vet_size += j;
     }
+
     return vet;
 }
 

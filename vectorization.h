@@ -28,16 +28,18 @@ unsigned char * vectorization(unsigned char mat[8][8]) {
 			else // descendo
 				vet[x] = mat[i][k-i];
 			x++;
-            vet[x] ? printf("vet[%d] = %d\n", x, vet[x]) : 0;
+            //vet[x] ? printf("vet[%d] = %d\n", x, vet[x]) : 0;
 		}
-        
+	}
+
+    for(int k = 0; k < 8; k++) {
         for(int i = k+1; i < 8; i++) {
 			if(k%2 == 0) // subindo
 				vet[x] = mat[8-i+k][i];
 			else // descendo
 				vet[x] = mat[i][8-i+k];
 			x++;
-            vet[x] ? printf("vet[%d] = %d\n", x, vet[x]) : 0;
+            //vet[x] ? printf("vet[%d] = %d\n", x, vet[x]) : 0;
 		}
 	}
 
@@ -71,9 +73,11 @@ void revert_vector(unsigned char* vet, unsigned char mat[8][8]) {
 				mat[i][k-i] = vet[x];
             }
 			x++;
-            vet[x] ? printf("vet[%d] = %d\n", x, vet[x]) : 0;
+            //vet[x] ? printf("vet[%d] = %d\n", x, vet[x]) : 0;
 		}
-        
+    }
+
+    for(int k = 0; k < 8; k++) {
         for(int i = k+1; i < 8; i++) {
 			if(k%2 == 0) { // subindo
 				mat[8-i+k][i] = vet[x];
@@ -82,7 +86,7 @@ void revert_vector(unsigned char* vet, unsigned char mat[8][8]) {
 				mat[i][8-i+k] = vet[x];
             }
 			x++;
-            vet[x] ? printf("vet[%d] = %d\n", x, vet[x]) : 0;
+            //vet[x] ? printf("vet[%d] = %d\n", x, vet[x]) : 0;
 		}
 	}
 }
@@ -100,7 +104,7 @@ void revert_vectorization(huffman_tree_t* root, FILE* file, unsigned char red[8]
     revert_vector(vgreen, green);
     revert_vector(vblue, blue);
 
-	return;
+	//return;
 }
 
 #endif
