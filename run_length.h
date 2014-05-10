@@ -48,9 +48,8 @@ void run_length(unsigned char* vet, huffman_tree_t** ht, FILE* file) {
     if (ht != NULL && file != NULL) {
         for(int i = 0; i <= j; i++) {
             int rep_huffman;
-            buffer_t size = ht_encode(ht, 65, table[2][i], &rep_huffman);
-//            write_byte(file, (unsigned char) rep_huffman, size);
-            write_byte(file, table[2][i], 7);
+            ht_encode(ht, 65, table[2][i], &rep_huffman);
+            write_byte(file, (unsigned char) rep_huffman, bit_size_of(rep_huffman));
             unsigned char nbits = (unsigned char) table[1][i];
             write_byte(file, nbits, 3);
             unsigned char value = (unsigned char) table[0][i];
@@ -102,8 +101,7 @@ unsigned char* reverse_run_length(FILE* file, huffman_tree_t* root){
     int vet_size = 0, i, j;
     
     while (vet_size < 64){
-//        int size = ht_decode(root, &freq, file);
-        freq = read_bits(file, 7);
+        int size = ht_decode(root, &freq, file);
         unsigned char nbits = read_bits(file, 3);
         nbits = nbits == 0 ? 8 : nbits;
         unsigned char value = read_bits(file, nbits);
