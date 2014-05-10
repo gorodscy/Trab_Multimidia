@@ -79,6 +79,7 @@ void send_blocks(struct colors color, FILE* file){
         free(color.green);
         free(color.blue);
     }
+    write_bit_flush(file);
     fclose(file);
 }
 

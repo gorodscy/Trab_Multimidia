@@ -49,7 +49,7 @@ int bit_size_of(int byte){
 }
 
 // Insere os bits dentro do byte para ser salvo no arquivo
-void write_bit(FILE* file, bool bit){
+int write_bit(FILE* file, bool bit){
     static unsigned char byte = 0x00;//0b00000000;
     static int pos=0;
     
@@ -59,16 +59,22 @@ void write_bit(FILE* file, bool bit){
     printf("%d", bit);
 #endif
 
-    if (pos < 7) {
-        pos++;
-    }
-    else {
+    if (pos == 7) {
 #ifdef DEBUG3
         printf("%X ", byte);
 #endif
         pos = 0;
         fwrite(&byte, 1, 1, file);
         byte = 0x00;//0b00000000;
+    }
+    else {
+        pos++;
+    }
+    return pos;
+}
+
+void write_bit_flush(FILE* file) {
+    while (write_bit(file, 0)) {
     }
 }
 

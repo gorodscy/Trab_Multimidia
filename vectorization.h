@@ -109,7 +109,7 @@ void revert_vectorization(huffman_tree_t* root, FILE* file, unsigned char red[8]
     revert_vector(vgreen, green);
     revert_vector(vblue, blue);
 
-	//return;
+	return;
 }
 
 #endif
