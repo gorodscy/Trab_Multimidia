@@ -28,7 +28,7 @@ void ht_qsort(huffman_tree_t* q[], int buffer_size) {
 	qsort(q, buffer_size, sizeof(huffman_tree_t*), ht_qsort_compare);
 }
 
-huffman_tree_t** ht_create(buffer_t* buffer, int buffer_size, huffman_tree_t *root) {
+huffman_tree_t** ht_create(buffer_t* buffer, int buffer_size, huffman_tree_t **root) {
 	huffman_tree_t **symbols = (huffman_tree_t**)calloc(buffer_size, sizeof(huffman_tree_t*));
 	huffman_tree_t **priorityQueue = (huffman_tree_t**)calloc(buffer_size, sizeof(huffman_tree_t*));
 
@@ -76,7 +76,7 @@ huffman_tree_t** ht_create(buffer_t* buffer, int buffer_size, huffman_tree_t *ro
 	}
 
 	// believe it or not, we have our tree!
-	root = priorityQueue[0];
+	*root = priorityQueue[0];
 	//MM_FREE(priorityQueue);
 	free(priorityQueue);
 
@@ -98,7 +98,17 @@ void ht_destroy(huffman_tree_t **symbols, huffman_tree_t *root) {
 	free(symbols);
 }
 
-unsigned short int ht_encode(huffman_tree_t **symbols, int buffer_size, char input, bitstream_t *bs) {
+int bits_to_i(bool* bits, int buffer_size, int length){
+    int byte = 0;
+    // write data at the right order.
+	for ( int i = length - 1; i >= 0; i-- ) {
+        byte <<= (i==length-1)? 0 : 1; // Skip the first iteration
+        byte |= bits[i];
+	}
+    return byte;
+}
+
+unsigned short int ht_encode(huffman_tree_t **symbols, int buffer_size, char input, int *bs) {
 	unsigned short int length = 0;
 	bool bits[buffer_size];
 
@@ -116,10 +126,7 @@ unsigned short int ht_encode(huffman_tree_t **symbols, int buffer_size, char inp
 		parent = symbol->parent;
 	}
 
-	// write data at the right order.
-	for ( int16_t i = (int16_t)length - 1; i >= 0; i-- ) {
-		bs_write_bool(bs, bits[i]);
-	}
+    *bs = bits_to_i(bits, buffer_size, length);
 
 	return length;
 }
