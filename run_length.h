@@ -116,7 +116,7 @@ unsigned char* reverse_run_length(FILE* file, huffman_tree_t* root){
         }
 #endif
         j = (int) freq;
-        for (i=0; i<j; i++) {
+        for (i=vet_size; i<j+vet_size; i++) {
             vet[i] = value;
         }
         vet_size += j;
