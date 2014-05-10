@@ -58,7 +58,7 @@ void write_bit(FILE* file, bool bit){
 #ifdef DEBUG
     printf("%d", bit);
 #endif
-    
+
     if (pos < 7) {
         pos++;
     }
@@ -127,6 +127,7 @@ bool read_bit(FILE* file){
     }
     bit = TAKE_N_BITS_FROM(byte, 7, 1);
     byte <<= 1;
+
     return bit;
 }
 

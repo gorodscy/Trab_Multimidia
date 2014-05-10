@@ -2,6 +2,7 @@
 #define _MULTIMEDIA_HUFFMAN_H_
 
 #include "bitstream.h"
+#include "save_bits.h"
 
 #define HUFFMAN_TYPE_NODE 0
 #define HUFFMAN_TYPE_LEAF 1
@@ -130,16 +131,13 @@ unsigned short int ht_encode(huffman_tree_t **symbols, int buffer_size, char inp
 	return length;
 }
 
-unsigned short int ht_decode(huffman_tree_t *root, char* output, bitstream_t *bs) {
+unsigned short int ht_decode(huffman_tree_t *root, char* output, FILE *bs) {
 	bool bit = 0;
 	unsigned short int length = 0;
 
 	// while we are working on a leaf...
 	while ( root->type == HUFFMAN_TYPE_NODE ) {
-		if ( !bs_read_bool(bs, &bit) ) {
-			// corrupted data!
-			return 0;
-		}
+		bit = read_bit(bs);
 		// which child should we take a look?
         root = bit ? root->node.childs[1] : root->node.childs[0];
         length++;
