@@ -28,18 +28,18 @@ unsigned char * vectorization(unsigned char mat[8][8]) {
 			else // descendo
 				vet[x] = mat[i][k-i];
 			x++;
+            vet[x] ? printf("vet[%d] = %d\n", x, vet[x]) : 0;
 		}
-	}
-
-	for(int k = 0; k < 8; k++) {
-		for(int i = k+1; i < 8; i++) {
+        
+        for(int i = k+1; i < 8; i++) {
 			if(k%2 == 0) // subindo
 				vet[x] = mat[8-i+k][i];
 			else // descendo
 				vet[x] = mat[i][8-i+k];
 			x++;
+            vet[x] ? printf("vet[%d] = %d\n", x, vet[x]) : 0;
 		}
-	}	
+	}
 
 	return vet;
 }
@@ -60,6 +60,30 @@ void vectorization_colors(huffman_tree_t** ht, FILE* file, unsigned char red[8][
     
 }
 
+void revert_vector(unsigned char* vet, unsigned char mat[8][8]) {
+    for(int k = 0; k < 8; k++) {
+		for(int i = 0; i <= k; i++) {
+			if(k%2 == 0) { // subindo
+				mat[k-i][i] = vet[x];
+            }
+			else { // descendo
+				mat[i][k-i] = vet[x];
+            }
+			x++;
+		}
+        
+        for(int i = k+1; i < 8; i++) {
+			if(k%2 == 0) { // subindo
+				mat[8-i+k][i] = vet[x];
+            }
+			else { // descendo
+				mat[i][8-i+k] = vet[x];
+            }
+			x++;
+		}
+	}
+}
+
 // revert the vectorization
 void revert_vectorization(huffman_tree_t* root, FILE* file, unsigned char red[8][8], unsigned char green[8][8], unsigned char blue[8][8]) {
 
@@ -70,37 +94,9 @@ void revert_vectorization(huffman_tree_t* root, FILE* file, unsigned char red[8]
     vgreen = reverse_run_length(file, root);
     vblue = reverse_run_length(file, root);
 
-    for(int k = 0; k < 8; k++) {
-		for(int i = 0; i <= k; i++) {
-			if(k%2 == 0) { // subindo
-				red[k-i][i] = vred[x];
-                green[k-i][i] = vgreen[x];
-                blue[k-i][i] = vblue[x];
-            }
-			else { // descendo
-				red[i][k-i] = vred[x];
-                green[i][k-i] = vgreen[x];
-                blue[i][k-i] = vblue[x];
-            }
-			x++;
-		}
-	}
-
-	for(int k = 0; k < 8; k++) {
-		for(int i = k+1; i < 8; i++) {
-			if(k%2 == 0) { // subindo
-				red[8-i+k][i] = vred[x];
-                green[8-i+k][i] = vgreen[x];
-                blue[8-i+k][i] = vblue[x];
-            }
-			else { // descendo
-				red[i][8-i+k] = vred[x];
-                green[i][8-i+k] = vgreen[x];
-                blue[i][8-i+k] = vblue[x];
-            }
-			x++;
-		}
-	}
+    revert_vector(vred, red);
+    revert_vector(vgreen, green);
+    revert_vector(vblue, blue);
 
 	return;
 }
