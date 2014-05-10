@@ -1,7 +1,6 @@
 #ifndef _MULTIMEDIA_HUFFMAN_H_
 #define _MULTIMEDIA_HUFFMAN_H_
 
-#include "bitstream.h"
 #include "save_bits.h"
 
 #define HUFFMAN_TYPE_NODE 0

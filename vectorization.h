@@ -15,6 +15,7 @@
 #include "run_length.h"
 
 void print_vector(unsigned char* vet) {
+    printf("Printing vector: ");
     for (int i=0; i<64; i++) {
         printf("%d ", vet[i]);
     }
@@ -58,9 +59,9 @@ void vectorization_colors(huffman_tree_t** ht, FILE* file, unsigned char red[8][
 	vred = vectorization(red);
 	vgreen = vectorization(green);
 	vblue = vectorization(blue);
-    
-    print_vector(vred);
-    
+#ifdef DEBUG_VECTOR
+    file && ht ? print_vector(vred) : 0;
+#endif
 	// send the information to the run-length encoding
     run_length(vred, ht, file);
     run_length(vgreen, ht, file);
@@ -102,9 +103,9 @@ void revert_vectorization(huffman_tree_t* root, FILE* file, unsigned char red[8]
     vred = reverse_run_length(file, root);
     vgreen = reverse_run_length(file, root);
     vblue = reverse_run_length(file, root);
-    
+#ifdef DEBUG_VECTOR
     print_vector(vred);
-
+#endif
     revert_vector(vred, red);
     revert_vector(vgreen, green);
     revert_vector(vblue, blue);
