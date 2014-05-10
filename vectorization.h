@@ -61,6 +61,7 @@ void vectorization_colors(huffman_tree_t** ht, FILE* file, unsigned char red[8][
 }
 
 void revert_vector(unsigned char* vet, unsigned char mat[8][8]) {
+    int x = 0;
     for(int k = 0; k < 8; k++) {
 		for(int i = 0; i <= k; i++) {
 			if(k%2 == 0) { // subindo
@@ -70,6 +71,7 @@ void revert_vector(unsigned char* vet, unsigned char mat[8][8]) {
 				mat[i][k-i] = vet[x];
             }
 			x++;
+            vet[x] ? printf("vet[%d] = %d\n", x, vet[x]) : 0;
 		}
         
         for(int i = k+1; i < 8; i++) {
@@ -80,6 +82,7 @@ void revert_vector(unsigned char* vet, unsigned char mat[8][8]) {
 				mat[i][8-i+k] = vet[x];
             }
 			x++;
+            vet[x] ? printf("vet[%d] = %d\n", x, vet[x]) : 0;
 		}
 	}
 }
@@ -87,7 +90,6 @@ void revert_vector(unsigned char* vet, unsigned char mat[8][8]) {
 // revert the vectorization
 void revert_vectorization(huffman_tree_t* root, FILE* file, unsigned char red[8][8], unsigned char green[8][8], unsigned char blue[8][8]) {
 
-	int x = 0;
     unsigned char *vred, *vgreen, *vblue;
     
     vred = reverse_run_length(file, root);
