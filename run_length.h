@@ -68,11 +68,14 @@ void run_length(unsigned char* vet, huffman_tree_t** ht, FILE* file) {
             write_byte(file, nbits, bit_size_of(table[1][i]));
             unsigned char value = (unsigned char) table[0][i];
             write_byte(file, value, bit_size_of(table[0][i]));
+            
+            printf("freq: %d | freq_huff: %d | nbits: %d | value: %d\n", table[2][i], rep_huffman, nbits, value);
         }
     }
     else {
-        for(int i = 0; i <= j; i++)
+        for(int i = 0; i <= j; i++) {
             elements[table[2][i]]++;
+        }
     }
 
 }
@@ -81,6 +84,7 @@ huffman_tree_t** call_huffman(huffman_tree_t** root, FILE* file) {
     // Grava a lista de frequencia no arquivo para poder
     // recontruir a arvore na hora de decode
     fwrite(elements, 64, sizeof(buffer_t), file);
+
     huffman_tree_t** ht = ht_create(elements, 65, root);
     return ht;
 }
@@ -106,7 +110,7 @@ unsigned char* reverse_run_length(FILE* file, huffman_tree_t* root){
         ht_decode(root, &freq, bs);
         unsigned char nbits = read_bits(file, 3);
         unsigned char value = read_bits(file, nbits);
-        
+        printf("freq: %d | nbits: %d | value: %d\n", freq, nbits, value);
         j = (int) freq;
         for (i=0; i<j; i++) {
             vet[i] = value;

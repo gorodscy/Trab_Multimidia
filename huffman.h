@@ -125,7 +125,6 @@ unsigned short int ht_encode(huffman_tree_t **symbols, int buffer_size, char inp
 		symbol = parent;
 		parent = symbol->parent;
 	}
-
     *bs = bits_to_i(bits, buffer_size, length);
 
 	return length;
