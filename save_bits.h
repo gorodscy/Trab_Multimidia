@@ -79,7 +79,7 @@ void write_bit_flush(FILE* file) {
 }
 
 // Insere os bits dentro do byte até completar 8 bits e o escreve no arquivo
-void write_byte(FILE* file, unsigned char byte, unsigned int size){
+void write_byte(FILE* file, int byte, unsigned int size){
     int i;
     bool bit;
     
