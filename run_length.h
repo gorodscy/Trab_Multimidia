@@ -62,7 +62,7 @@ void run_length(unsigned char* vet, huffman_tree_t** ht, FILE* file) {
     if (ht != NULL && file != NULL) {
         for(int i = 0; i <= j; i++) {
             int rep_huffman;
-            buffer_t size = ht_encode(ht, 65, table[2][i], &rep_huffman);
+            buffer_t size = ht_encode(ht, 64, table[2][i], &rep_huffman);
             write_byte(file, (unsigned char) rep_huffman, size);
             unsigned char nbits = (unsigned char) table[1][i];
             write_byte(file, nbits, bit_size_of(table[1][i]));
@@ -81,7 +81,7 @@ huffman_tree_t** call_huffman(huffman_tree_t** root, FILE* file) {
     // Grava a lista de frequencia no arquivo para poder
     // recontruir a arvore na hora de decode
     fwrite(elements, 64, sizeof(buffer_t), file);
-    huffman_tree_t** ht = ht_create(elements, 64, root);
+    huffman_tree_t** ht = ht_create(elements, 65, root);
     return ht;
 }
 
@@ -89,7 +89,7 @@ huffman_tree_t** read_huffman(huffman_tree_t** root, FILE* file) {
     // Grava a lista de frequencia no arquivo para poder
     // recontruir a arvore na hora de decode
     fread(elements, 64, sizeof(buffer_t), file);
-    huffman_tree_t** ht = ht_create(elements, 64, root);
+    huffman_tree_t** ht = ht_create(elements, 65, root);
     return ht;
 }
 

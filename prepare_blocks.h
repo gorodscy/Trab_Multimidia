@@ -21,6 +21,7 @@
 // Comprime a imagem e salva no arquivo
 void send_blocks(struct colors color, FILE* file){
     // Verifica se a imagem é válida
+    
     if(color.larg != -1) {    
         // Cria as matrizes de 8 temporárias
         unsigned char red[8][8];
@@ -43,13 +44,13 @@ void send_blocks(struct colors color, FILE* file){
                 {
                     for (j=offsetALT; j<offsetALT+8; j++)
                     {
-                        blue[i%8][j%8] = color.blue[i][j];
-                        green[i%8][j%8] = color.green[i][j];
                         red[i%8][j%8] = color.red[i][j];
+                        green[i%8][j%8] = color.green[i][j];
+                        blue[i%8][j%8] = color.blue[i][j];
                     }
                 }
                 
-                vectorization_colors(ht, file, blue, green, red);
+                vectorization_colors(ht, file, red, green, blue);
             }
         }
 
@@ -65,19 +66,19 @@ void send_blocks(struct colors color, FILE* file){
                 {
                     for (j=offsetALT; j<offsetALT+8; j++)
                     {
-                        blue[i%8][j%8] = color.blue[i][j];
-                        green[i%8][j%8] = color.green[i][j];
                         red[i%8][j%8] = color.red[i][j];
+                        green[i%8][j%8] = color.green[i][j];
+                        blue[i%8][j%8] = color.blue[i][j];
                     }
                 }
                 
-                vectorization_colors(ht, file, blue, green, red);
+                vectorization_colors(ht, file, red, green, blue);
             }
         }
         // Libera a mamória da struct (que foi criada ao abrir a imagem)
         free(color.red);
-        free(color.blue);
         free(color.green);
+        free(color.blue);
     }
     fclose(file);
 }

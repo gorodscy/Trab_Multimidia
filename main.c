@@ -27,8 +27,9 @@ int main(int argc, char** argv)
 	// comprime a imagem
 	// primeira imagem - imagem normal em BMP
 	// segunda imagem - imagem comprimida
-	if(atoi(argv[1]) == 0)
+	if(atoi(argv[1]) == 0) {
     	send_blocks(open_image(argv[2]), fopen(argv[3],"wb+"));
+    }
     else if(atoi(argv[1]) == 1) {
 	    // Realiza a leitura do arquivo comprimido
 	    struct colors img = get_blocks(fopen(argv[2], "rb+"));
