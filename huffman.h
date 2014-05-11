@@ -52,7 +52,7 @@ huffman_tree_t** ht_create(buffer_t* buffer, int buffer_size, huffman_tree_t **r
 	 *	ate que so reste uma folha, que e a raiz da arvore.
 	 */
 	while ( lastNodeIndex > 0 ) {
-		/* pega os doius ultimos valores */
+		/* pega os dois ultimos valores */
 		huffman_tree_t *last = priorityQueue[lastNodeIndex];
 		huffman_tree_t *almostLast = priorityQueue[lastNodeIndex - 1];
 		lastNodeIndex -= 2;
