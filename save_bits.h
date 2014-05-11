@@ -37,7 +37,8 @@ int nbits_freq(int nbits, int freq) {
 }
 
 void decode_nbits_freq(int code, int* nbits, int* freq) {
-    *freq = 1 + TAKE_N_BITS_FROM(code, 0, 6);
+    *freq = TAKE_N_BITS_FROM(code, 0, 6);
+    *freq = *freq + 1;
     *nbits = TAKE_N_BITS_FROM(code, 6, 3);
     *nbits = *nbits ? *nbits : 8;
 }
