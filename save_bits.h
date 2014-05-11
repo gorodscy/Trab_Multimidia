@@ -18,6 +18,29 @@
 
 #define TAKE_N_BITS_FROM(b, p, n) ((b) >> (p)) & ((1 << (n)) - 1)
 
+int nbits_freq(int nbits, int freq) {
+    int result = 0x00;
+    
+    nbits = nbits == 8 ? 0 : nbits;
+    
+    if (freq > 64 || nbits > 7) {
+        printf("Tamanho de frequência inválida\n");
+        return 0;
+    }
+    freq = freq-1; // Ajusta pra frequencia 1 ser o valor zero. Economizando 1 bit.
+    
+    result = nbits;
+    result <<= 6;
+    result |= freq;
+    
+    return result;
+}
+
+void decode_nbits_freq(int code, int* nbits, int* freq) {
+    *freq = 1 + TAKE_N_BITS_FROM(code, 0, 6);
+    *nbits = TAKE_N_BITS_FROM(code, 6, 3);
+}
+
 // Salva o tamanho da imagem no arquivo compactado
 void setSize(FILE* file, int width, int height){
     rewind(file);
