@@ -14,7 +14,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <string.h>
 
 #define TAKE_N_BITS_FROM(b, p, n) ((b) >> (p)) & ((1 << (n)) - 1)
 
@@ -27,7 +26,7 @@ int nbits_freq(int nbits, int freq) {
         printf("Tamanho de frequência inválida\n");
         return 0;
     }
-    freq = freq-1; // Ajusta pra frequencia 1 ser o valor zero. Economizando 1 bit.
+    freq = freq-1; /* Ajusta pra frequencia 1 ser o valor zero. Economizando 1 bit. */
     
     result = nbits;
     result = result << 6;
@@ -43,14 +42,18 @@ void decode_nbits_freq(int code, int* nbits, int* freq) {
     *nbits = *nbits ? *nbits : 8;
 }
 
-// Salva o tamanho da imagem no arquivo compactado
+/*
+ * Salva o tamanho da imagem no arquivo compactado
+ */
 void setSize(FILE* file, int width, int height){
     rewind(file);
     fwrite(&width, 4, 1, file);
     fwrite(&height, 4, 1, file);
 }
 
-// Le o tamanho da imagem no arquivo compactado
+/*
+ * Le o tamanho da imagem no arquivo compactado
+ */
 void getSize(FILE* file, int* width, int* height){
     rewind(file);
     fread(width, 4, 1, file);
@@ -61,7 +64,9 @@ void getSize(FILE* file, int* width, int* height){
 #endif
 }
 
-// Pega o tamanho em bits do "byte"
+/*
+ * Pega o tamanho em bits do "byte"
+ */
 int bit_size_of(int byte){
     
     int i;
@@ -73,9 +78,11 @@ int bit_size_of(int byte){
     return 1;
 }
 
-// Insere os bits dentro do byte para ser salvo no arquivo
+/*
+ * Insere os bits dentro do byte para ser salvo no arquivo
+ */
 int write_bit(FILE* file, bool bit){
-    static unsigned char byte = 0x00;//0b00000000;
+    static unsigned char byte = 0x00;
     static int pos=0;
     
     byte <<= 1;
@@ -90,7 +97,7 @@ int write_bit(FILE* file, bool bit){
 #endif
         pos = 0;
         fwrite(&byte, 1, 1, file);
-        byte = 0x00;//0b00000000;
+        byte = 0x00;
     }
     else {
         pos++;
@@ -103,7 +110,9 @@ void write_bit_flush(FILE* file) {
     }
 }
 
-// Insere os bits dentro do byte até completar 8 bits e o escreve no arquivo
+/*
+ * Insere os bits dentro do byte até completar 8 bits e o escreve no arquivo
+ */
 void write_byte(FILE* file, int byte, unsigned int size){
     int i;
     bool bit;
@@ -117,10 +126,12 @@ void write_byte(FILE* file, int byte, unsigned int size){
 #endif
 }
 
-//Escreve os valores das matrizes de cores no arquivo compactado
+/*
+ * Escreve os valores das matrizes de cores no arquivo compactado
+ */
 void grava_bits(FILE* file, unsigned char red[8][8], unsigned char green[8][8], unsigned char blue[8][8]){
     
-    unsigned int i, j, k, a;
+    unsigned int i, j;
     
     for (i=0; i<8; i++) {
         for (j=0; j<8; j++) {
@@ -129,21 +140,23 @@ void grava_bits(FILE* file, unsigned char red[8][8], unsigned char green[8][8], 
 #endif
             
             unsigned int size = bit_size_of(red[i][j]);
-            write_byte(file, size-1, 3); // - Escreve ultimos 3 bits no arquivo
-            write_byte(file, red[i][j], size); // - Escreve ultimos size bits de red[i][j]
+            write_byte(file, size-1, 3); /* - Escreve ultimos 3 bits no arquivo */
+            write_byte(file, red[i][j], size); /* - Escreve ultimos size bits de red[i][j] */
             
             size = bit_size_of(green[i][j]);
-            write_byte(file, size-1, 3); // - Escreve ultimos 3 bits no arquivo
-            write_byte(file, green[i][j], size); // - Escreve ultimos size bits de green[i][j]
+            write_byte(file, size-1, 3); /* - Escreve ultimos 3 bits no arquivo */
+            write_byte(file, green[i][j], size); /* - Escreve ultimos size bits de green[i][j] */
             
             size = bit_size_of(blue[i][j]);
-            write_byte(file, size-1, 3); // - Escreve ultimos 3 bits no arquivo
-            write_byte(file, blue[i][j], size); // - Escreve ultimos size bits de blue[i][j]
+            write_byte(file, size-1, 3); /* - Escreve ultimos 3 bits no arquivo */
+            write_byte(file, blue[i][j], size); /* - Escreve ultimos size bits de blue[i][j] */
         }
     }
 }
 
-// Le cada bit do arquivo compactado
+/*
+ * Le cada bit do arquivo compactado
+ */
 bool read_bit(FILE* file){
     static int pos=7;
     static unsigned char byte;
@@ -162,10 +175,12 @@ bool read_bit(FILE* file){
     return bit;
 }
 
-// Separa os valores, gerando os bytes de cores
+/*
+ * Separa os valores, gerando os bytes de cores
+ */
 unsigned char read_bits(FILE* file, int qtt){
     int i;
-    unsigned char byte = 0x00;//0b00000000;
+    unsigned char byte = 0x00;
     
     for (i=0; i<qtt; i++) {
         byte <<= i?1:0;
@@ -174,11 +189,13 @@ unsigned char read_bits(FILE* file, int qtt){
     return byte;
 }
 
-// Le as matrizes 8x8 do arquivo compactado
+/*
+ * Le as matrizes 8x8 do arquivo compactado
+ */
 void read_matrix(FILE* file, unsigned char red[8][8], unsigned char green[8][8], unsigned char blue[8][8]){
     
-    unsigned int i, j, p=0;
-    int size, byte;
+    unsigned int i, j;
+    int size;
     
     for (i=0; i<8; i++) {
         for (j=0; j<8; j++) {

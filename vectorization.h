@@ -23,26 +23,26 @@ void print_vector(unsigned char* vet) {
 }
 
 unsigned char * vectorization(unsigned char mat[8][8]) {
-	int x = 0;
+	int x = 0, k, i;
 	unsigned char *vet;
 
 	vet = (unsigned char*)malloc(64*sizeof(unsigned char));
 
-	 for(int k = 0; k < 8; k++) {
-	 	for(int i = 0; i <= k; i++) {
-	 		if(k%2 == 0) // subindo
+	 for(k = 0; k < 8; k++) {
+	 	for(i = 0; i <= k; i++) {
+	 		if(k%2 == 0) /* subindo */
 	 			vet[x] = mat[k-i][i];
-	 		else // descendo
+	 		else /* descendo */
 	 			vet[x] = mat[i][k-i];
 	 		x++;
 	 	}
 	 }
    
-    for(int k = 0; k < 8; k++) {
-        for(int i = k+1; i < 8; i++) {
-            if(k%2 == 0) // subindo
+    for(k = 0; k < 8; k++) {
+        for(i = k+1; i < 8; i++) {
+            if(k%2 == 0) /* subindo */
                 vet[x] = mat[8-i+k][i];
-            else // descendo
+            else /* descendo */
                 vet[x] = mat[i][8-i+k];
             x++;
         }
@@ -62,7 +62,7 @@ void vectorization_colors(huffman_tree_t** ht, FILE* file, unsigned char red[8][
 #ifdef DEBUG_VECTOR
     file && ht ? print_vector(vred) : 0;
 #endif
-	// send the information to the run-length encoding
+	/* send the information to the run-length encoding */
     run_length(vred, ht, file);
     run_length(vgreen, ht, file);
 	run_length(vblue, ht, file);
@@ -70,24 +70,25 @@ void vectorization_colors(huffman_tree_t** ht, FILE* file, unsigned char red[8][
 }
 
 void revert_vector(unsigned char* vet, unsigned char mat[8][8]) {
-    int x = 0;
-    for(int k = 0; k < 8; k++) {
-        for(int i = 0; i <= k; i++) {
-	 		if(k%2 == 0) { // subindo
+    int x = 0, k, i;
+
+    for(k = 0; k < 8; k++) {
+        for(i = 0; i <= k; i++) {
+	 		if(k%2 == 0) { /* subindo */
 	 			mat[k-i][i] = vet[x];
             }
-	 		else { // descendo
+	 		else { /* descendo */
 	 			mat[i][k-i] = vet[x];
             }
 	 		x++;
 	 	}
     }
-    for(int k = 0; k < 8; k++) {
-        for(int i = k+1; i < 8; i++) {
-	 		if(k%2 == 0) { // subindo
+    for(k = 0; k < 8; k++) {
+        for(i = k+1; i < 8; i++) {
+	 		if(k%2 == 0) { /* subindo */
 	 			mat[8-i+k][i] = vet[x];
             }
-	 		else { // descendo
+	 		else { /* descendo */
 	 			mat[i][8-i+k] = vet[x];
             }
 	 		x++;
@@ -95,7 +96,7 @@ void revert_vector(unsigned char* vet, unsigned char mat[8][8]) {
     }
 }
 
-// revert the vectorization
+
 void revert_vectorization(huffman_tree_t* root, FILE* file, unsigned char red[8][8], unsigned char green[8][8], unsigned char blue[8][8]) {
 
     unsigned char *vred, *vgreen, *vblue;
@@ -109,8 +110,6 @@ void revert_vectorization(huffman_tree_t* root, FILE* file, unsigned char red[8]
     revert_vector(vred, red);
     revert_vector(vgreen, green);
     revert_vector(vblue, blue);
-
-	//return;
 }
 
 #endif

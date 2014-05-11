@@ -15,24 +15,27 @@
 #include "huffman.h"
 #include "save_bits.h"
 #include "vectorization.h"
-#include <math.h>
 
-
-buffer_t elements[512] = {0}; // initialize huffman elements with 0
+/* inicializa o vetor com as frequencias de huffman com 0 */
+buffer_t elements[512] = {0};
 
 
 void run_length(unsigned char* vet, huffman_tree_t** ht, FILE* file) {
 
-	// create a table with number, number of bits and repetition
+	/* cria uma tabela com o 
+	 * 0 - valor do pixel, 
+	 * 1 - numero de bits e 
+	 * 2 - a quantidade de repeticoes
+	 */
 	int table[3][65];
 	int j = 0, ant = vet[0];
 	
-	// initialize the first repetition of the vector
+	/* inicializa a primeira "repeticao" do vetor */
 	table[0][0] = (int) vet[0];
 	table[1][0] = bit_size_of( (int) vet[0] );
 	table[2][0] = 0;
     
-	// iterate through the vector and check for repetitions
+	/* itera pelo vetor procurando repeticoes */
 	for(int i = 0; i < 64; i++) {
 		if(ant == vet[i])
 			table[2][j]++;
@@ -51,10 +54,7 @@ void run_length(unsigned char* vet, huffman_tree_t** ht, FILE* file) {
             int nbitsfreq = nbits_freq(table[1][i], table[2][i]);
             buffer_t size = ht_encode(ht, 512, nbitsfreq, &cod_huffman);
             write_byte(file, cod_huffman, size);
-            
             unsigned char nbits = (unsigned char) table[1][i];
-//            write_byte(file, nbits, 3);
-            
             unsigned char value = (unsigned char) table[0][i];
             write_byte(file, value, nbits);
             
@@ -71,6 +71,7 @@ void run_length(unsigned char* vet, huffman_tree_t** ht, FILE* file) {
     }
     else {
         for(int i = 0; i <= j; i++) {
+        	/* modifica os valores da tabela de frequencia de huffman */
             int pos = nbits_freq(table[1][i], table[2][i]);
             elements[pos]++;
         }
@@ -79,8 +80,9 @@ void run_length(unsigned char* vet, huffman_tree_t** ht, FILE* file) {
 }
 
 huffman_tree_t** call_huffman(huffman_tree_t** root, FILE* file) {
-    // Grava a lista de frequencia no arquivo para poder
-    // recontruir a arvore na hora de decode
+    /* Grava a lista de frequencia no arquivo para poder
+     * recontruir a arvore na hora de decode
+     */
     fwrite(elements, 512, sizeof(buffer_t), file);
 
     huffman_tree_t** ht = ht_create(elements, 512, root);
@@ -88,8 +90,9 @@ huffman_tree_t** call_huffman(huffman_tree_t** root, FILE* file) {
 }
 
 huffman_tree_t** read_huffman(huffman_tree_t** root, FILE* file) {
-    // Grava a lista de frequencia no arquivo para poder
-    // recontruir a arvore na hora de decode
+    /* Grava a lista de frequencia no arquivo para poder
+     * recontruir a arvore na hora de decode
+     */
     fread(elements, 512, sizeof(buffer_t), file);
     huffman_tree_t** ht = ht_create(elements, 512, root);
     return ht;
@@ -104,10 +107,9 @@ unsigned char* reverse_run_length(FILE* file, huffman_tree_t* root){
     int nbits, freq;
     
     while (vet_size < 64){
-        int size = ht_decode(root, &nbitsfreq, file);
+        ht_decode(root, &nbitsfreq, file);
         decode_nbits_freq(nbitsfreq, &nbits, &freq);
         nbits = nbits == 0 ? 8 : nbits;
-        printf("size: %d - nbfreq: %d - freq: %d - nbits: %d\n", size, nbitsfreq, freq, nbits);
         unsigned char value = read_bits(file, nbits);
         
 #ifdef DEBUG_RUN_LENGTH
