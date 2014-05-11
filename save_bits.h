@@ -40,7 +40,6 @@ void decode_nbits_freq(int code, int* nbits, int* freq) {
     *freq = 1 + TAKE_N_BITS_FROM(code, 0, 6);
     *nbits = TAKE_N_BITS_FROM(code, 6, 3);
     *nbits = *nbits ? *nbits : 8;
-    printf("code: %d || nbits: %d | freq: %d\n", code, *nbits, *freq);
 }
 
 // Salva o tamanho da imagem no arquivo compactado

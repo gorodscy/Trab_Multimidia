@@ -45,7 +45,7 @@ huffman_tree_t** ht_create(buffer_t* buffer, int buffer_size, huffman_tree_t **r
 	// sort the queue starting with the highest frequencies (count field, actually).
 	ht_qsort(priorityQueue, buffer_size);
 
-	char lastNodeIndex = buffer_size-1;
+	int lastNodeIndex = buffer_size-1;
 	/*
 	 * 	The least frequent symbols are the last ones.
 	 *	Let's replace them with a node, so that they become childs of the node.
@@ -104,9 +104,7 @@ int bits_to_i(bool* bits, int buffer_size, int length){
 	for ( int i = length - 1; i >= 0; i-- ) {
         byte <<= (i==length-1)? 0 : 1; // Skip the first iteration
         byte |= bits[i];
-        printf("%d", bits[i]);
 	}
-    printf("Returning: %d\n", byte);
     return byte;
 }
 
