@@ -107,7 +107,7 @@ unsigned char* reverse_run_length(FILE* file, huffman_tree_t* root){
         int size = ht_decode(root, &nbitsfreq, file);
         decode_nbits_freq(nbitsfreq, &nbits, &freq);
         nbits = nbits == 0 ? 8 : nbits;
-        printf("size: %d - nbfreq: %d - freq: %d - nbits: %d\n", size, nbitsfreq, freq, nbits);
+
         unsigned char value = read_bits(file, nbits);
         
 #ifdef DEBUG_RUN_LENGTH
