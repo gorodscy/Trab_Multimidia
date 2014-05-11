@@ -50,6 +50,7 @@ void run_length(unsigned char* vet, huffman_tree_t** ht, FILE* file) {
             int cod_huffman;
             int nbitsfreq = nbits_freq(table[1][i], table[2][i]);
             buffer_t size = ht_encode(ht, 512, nbitsfreq, &cod_huffman);
+            printf("size: %d - %d - %d\n", size, nbitsfreq, cod_huffman);
             write_byte(file, cod_huffman, size);
             
             unsigned char nbits = (unsigned char) table[1][i];
@@ -99,7 +100,7 @@ unsigned char* reverse_run_length(FILE* file, huffman_tree_t* root){
     
     unsigned char* vet = (unsigned char*) malloc(64*sizeof(unsigned char));
     
-    char nbitsfreq;
+    int nbitsfreq;
     int vet_size = 0, i, j;
     int nbits, freq;
     
@@ -111,7 +112,7 @@ unsigned char* reverse_run_length(FILE* file, huffman_tree_t* root){
         
 #ifdef DEBUG_RUN_LENGTH
         static int w = 0;
-        printf("%d ", value);
+        printf("%d-%d-%d ", freq, nbits, value);
         w++;
         if(w==3){
             printf("\n-----------\n");

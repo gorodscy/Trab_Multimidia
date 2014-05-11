@@ -104,11 +104,13 @@ int bits_to_i(bool* bits, int buffer_size, int length){
 	for ( int i = length - 1; i >= 0; i-- ) {
         byte <<= (i==length-1)? 0 : 1; // Skip the first iteration
         byte |= bits[i];
+        printf("%d", bits[i]);
 	}
+    printf("Returning: %d\n", byte);
     return byte;
 }
 
-unsigned short int ht_encode(huffman_tree_t **symbols, int buffer_size, char input, int *bs) {
+unsigned short int ht_encode(huffman_tree_t **symbols, int buffer_size, int input, int *bs) {
 	unsigned short int length = 0;
 	bool bits[buffer_size];
 
@@ -130,7 +132,7 @@ unsigned short int ht_encode(huffman_tree_t **symbols, int buffer_size, char inp
 	return length;
 }
 
-unsigned short int ht_decode(huffman_tree_t *root, char* output, FILE *bs) {
+unsigned short int ht_decode(huffman_tree_t *root, int* output, FILE *bs) {
 	bool bit = 0;
 	unsigned short int length = 0;
 
