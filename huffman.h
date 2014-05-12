@@ -32,8 +32,9 @@ huffman_tree_t** ht_create(buffer_t* buffer, int buffer_size, huffman_tree_t **r
 	huffman_tree_t **symbols = (huffman_tree_t**)calloc(buffer_size, sizeof(huffman_tree_t*));
 	huffman_tree_t **priorityQueue = (huffman_tree_t**)calloc(buffer_size, sizeof(huffman_tree_t*));
 
+    int i;
 	/* cria um simbolo para cada folha e o adiciona na fila de prioridades */
-	for ( int i = 0; i < buffer_size; i++ ) {
+	for ( i = 0; i < buffer_size; i++ ) {
 		huffman_tree_t *node = (huffman_tree_t*)malloc(sizeof(huffman_tree_t));
 		node->count = buffer[i];
 		node->type = HUFFMAN_TYPE_LEAF;
@@ -65,8 +66,10 @@ huffman_tree_t** ht_create(buffer_t* buffer, int buffer_size, huffman_tree_t **r
 		last->parent = almostLast->parent = node;
 		/* insere o no na fila novamente */
 		priorityQueue[++lastNodeIndex] = node;
+        
+        int i;
 		/* ordena os nos novamente */
-		for ( int i = lastNodeIndex; i > 0 && priorityQueue[i]->count > priorityQueue[i - 1]->count; i-- ) {
+		for ( i = lastNodeIndex; i > 0 && priorityQueue[i]->count > priorityQueue[i - 1]->count; i-- ) {
 			/* troca os nos */
 			huffman_tree_t *temp;
 			temp = priorityQueue[i];

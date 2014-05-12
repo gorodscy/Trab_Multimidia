@@ -16,7 +16,8 @@
 
 void print_vector(unsigned char* vet) {
     printf("Printing vector: ");
-    for (int i=0; i<64; i++) {
+    int i;
+    for (i=0; i<64; i++) {
         printf("%d ", vet[i]);
     }
     printf("\n");
@@ -62,7 +63,7 @@ void vectorization_colors(huffman_tree_t** ht, FILE* file, unsigned char red[8][
 #ifdef DEBUG_VECTOR
     file && ht ? print_vector(vred) : 0;
 #endif
-	/* send the information to the run-length encoding */
+	/* Envia informações para o run-length encoding */
     run_length(vred, ht, file);
     run_length(vgreen, ht, file);
 	run_length(vblue, ht, file);
