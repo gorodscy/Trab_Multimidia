@@ -28,7 +28,7 @@ void run_length(unsigned char* vet, huffman_tree_t** ht, FILE* file) {
 	 * 2 - a quantidade de repeticoes
 	 */
 	int table[3][65];
-	int j = 0, ant = vet[0];
+	int i, j = 0, ant = vet[0];
 	
 	/* inicializa a primeira "repeticao" do vetor */
 	table[0][0] = (int) vet[0];
@@ -36,7 +36,7 @@ void run_length(unsigned char* vet, huffman_tree_t** ht, FILE* file) {
 	table[2][0] = 0;
     
 	/* itera pelo vetor procurando repeticoes */
-	for(int i = 0; i < 64; i++) {
+	for(i = 0; i < 64; i++) {
 		if(ant == vet[i])
 			table[2][j]++;
 		else {
@@ -49,7 +49,7 @@ void run_length(unsigned char* vet, huffman_tree_t** ht, FILE* file) {
 	}
     
     if (ht != NULL && file != NULL) {
-        for(int i = 0; i <= j; i++) {
+        for(i = 0; i <= j; i++) {
             int cod_huffman;
             int nbitsfreq = nbits_freq(table[1][i], table[2][i]);
             buffer_t size = ht_encode(ht, 512, nbitsfreq, &cod_huffman);
@@ -70,7 +70,7 @@ void run_length(unsigned char* vet, huffman_tree_t** ht, FILE* file) {
         }
     }
     else {
-        for(int i = 0; i <= j; i++) {
+        for(i = 0; i <= j; i++) {
         	/* modifica os valores da tabela de frequencia de huffman */
             int pos = nbits_freq(table[1][i], table[2][i]);
             elements[pos]++;

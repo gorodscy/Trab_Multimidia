@@ -99,9 +99,9 @@ void ht_destroy(huffman_tree_t **symbols, huffman_tree_t *root) {
 }
 
 int bits_to_i(bool* bits, int buffer_size, int length){
-    int byte = 0;
+    int i, byte = 0;
     /* escreve os bits na ordem certar */
-	for ( int i = length - 1; i >= 0; i-- ) {
+	for ( i = length - 1; i >= 0; i-- ) {
         byte <<= (i==length-1)? 0 : 1; /* pula a primeira iteracao */
         byte |= bits[i];
 	}
