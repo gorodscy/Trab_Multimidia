@@ -363,6 +363,15 @@ void dct_colors(huffman_tree_t** ht, FILE* file, unsigned char red[8][8], unsign
 
 	int dred[LIM][LIM], dgreen[LIM][LIM], dblue[LIM][LIM];
 	dct(red, dred);
+
+	int i, j;
+	for(i = 0; i < LIM; i++) {
+		for(j = 0; j < LIM; j++) {
+			printf("%d ", dred[i][j]);
+		}
+		printf("\n");
+	}
+
 	dct(green, dgreen);
 	dct(blue, dblue);
 
@@ -374,6 +383,14 @@ void idct_colors(huffman_tree_t* root, FILE* file, unsigned char red[8][8], unsi
 	int mred[LIM][LIM], mgreen[LIM][LIM], mblue[LIM][LIM];
 
 	revert_vectorization(root, file, mred, mgreen, mblue);
+
+	int i, j;
+	for(i = 0; i < LIM; i++) {
+		for(j = 0; j < LIM; j++) {
+			printf("%d ", mred[i][j]);
+		}
+		printf("\n");
+	}
 
 	idct(mred, red);
 	idct(mgreen, green);

@@ -38,8 +38,10 @@ int nbits_freq(int nbits, int freq) {
 void decode_nbits_freq(int code, int* nbits, int* freq) {
     *freq = TAKE_N_BITS_FROM(code, 0, 6);
     *freq = *freq + 1;
-    *nbits = TAKE_N_BITS_FROM(code, 6, 3);
-    *nbits = *nbits ? *nbits : 8;
+    *nbits = TAKE_N_BITS_FROM(code, 6, 5); 
+    /* *nbits = TAKE_N_BITS_FROM(code, 6, 3);
+    *nbits = *nbits ? *nbits : 8; */
+    *nbits = *nbits ? *nbits : 32;
 }
 
 /*
@@ -116,7 +118,12 @@ void write_bit_flush(FILE* file) {
 void write_byte(FILE* file, int byte, unsigned int size){
     int i;
     bool bit;
-    
+/*
+    if(byte > 0)
+    	bit = TAKE_N_BITS_FROM(byte, size, 1);
+    else
+    	bit = TAKE_N_BITS_FROM(byte, size, 1);
+  */  
     for (i=1; i<=size; i++) {
         bit = TAKE_N_BITS_FROM(byte, size-i, 1);
         write_bit(file, bit);
@@ -159,7 +166,8 @@ void grava_bits(FILE* file, unsigned char red[8][8], unsigned char green[8][8], 
  */
 bool read_bit(FILE* file){
     static int pos=7;
-    static unsigned char byte;
+    //static unsigned char byte;
+    static int byte;
     bool bit;
     
     if (pos < 7) {
@@ -190,6 +198,20 @@ unsigned char read_bits(FILE* file, int qtt){
 }
 
 /*
+ * Separa os valores, gerando os bytes de cores
+ */
+int read_bits2(FILE* file, int qtt){
+    int i;
+    int byte = 0x00;
+    
+    for (i=0; i<qtt; i++) {
+        byte <<= i?1:0;
+        byte |= read_bit(file);
+    }
+    return byte;
+}
+
+/*
  * Le as matrizes 8x8 do arquivo compactado
  */
 void read_matrix(FILE* file, unsigned char red[8][8], unsigned char green[8][8], unsigned char blue[8][8]){
@@ -200,13 +222,16 @@ void read_matrix(FILE* file, unsigned char red[8][8], unsigned char green[8][8],
     for (i=0; i<8; i++) {
         for (j=0; j<8; j++) {
             
-            size = read_bits(file, 3);
+            //size = read_bits(file, 3);
+            size = read_bits(file, 5);
             red[i][j] = read_bits(file, size+1);
             
-            size = read_bits(file, 3);
+            //size = read_bits(file, 3);
+            size = read_bits(file, 5);
             green[i][j] = read_bits(file, size+1);
             
-            size = read_bits(file, 3);
+            //size = read_bits(file, 3);
+            size = read_bits(file, 5);
             blue[i][j] = read_bits(file, size+1);
             
 #ifdef DEBUG2

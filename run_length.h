@@ -16,7 +16,7 @@
 #include "save_bits.h"
 #include "vectorization.h"
 
-#define buffer 2048 /*512*/
+#define buffer 2049 /*512*/
 /* inicializa o vetor com as frequencias de huffman com 0 */
 buffer_t elements[buffer] = {0};
 
@@ -32,7 +32,7 @@ void run_length(int* vet, huffman_tree_t** ht, FILE* file) {
 	int i, j = 0, ant = vet[0];
 	
 	/* inicializa a primeira "repeticao" do vetor */
-	table[0][0] = (int) vet[0];
+	table[0][0] = vet[0];
 	table[1][0] = bit_size_of(vet[0]);
 	table[2][0] = 0;
     
@@ -42,7 +42,7 @@ void run_length(int* vet, huffman_tree_t** ht, FILE* file) {
 			table[2][j]++;
 		else {
 			j++;
-			table[0][j] = (int) vet[i];
+			table[0][j] = vet[i];
 			table[1][j] = bit_size_of(vet[i]);
 			table[2][j] = 1;
 			ant = vet[i];
@@ -55,7 +55,7 @@ void run_length(int* vet, huffman_tree_t** ht, FILE* file) {
             int nbitsfreq = nbits_freq(table[1][i], table[2][i]);
             buffer_t size = ht_encode(ht, buffer, nbitsfreq, &cod_huffman);
             write_byte(file, cod_huffman, size);
-            unsigned char nbits = (unsigned char) table[1][i];
+            unsigned int nbits = (unsigned int) table[1][i];
             int value = table[0][i];
             write_byte(file, value, nbits);
             
@@ -110,8 +110,8 @@ int* reverse_run_length(FILE* file, huffman_tree_t* root){
     while (vet_size < 64){
         ht_decode(root, &nbitsfreq, file);
         decode_nbits_freq(nbitsfreq, &nbits, &freq);
-        nbits = nbits == 0 ? 32 : nbits;
-        int value = read_bits(file, nbits);
+        //nbits = nbits == 0 ? 32 : nbits;
+        int value = read_bits2(file, nbits);
         
 #ifdef DEBUG_RUN_LENGTH
         static int w = 0;
