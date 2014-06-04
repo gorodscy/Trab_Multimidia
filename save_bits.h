@@ -1,5 +1,5 @@
 /*
- * TRABALHO 01
+ * TRABALHO 03
  * Grupo 04:
  * Vanessa Apolinário de Lima
  * Caio Augusto da Silva Gomes
@@ -20,9 +20,9 @@
 int nbits_freq(int nbits, int freq) {
     int result = 0x00;
     
-    nbits = nbits == 8 ? 0 : nbits;
+    nbits = nbits == 32 ? 0 : nbits;
     
-    if (freq > 64 || nbits > 7) {
+    if (freq > 64 || nbits > 31) {
         printf("Tamanho de frequência inválida\n");
         return 0;
     }

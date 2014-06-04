@@ -1,5 +1,5 @@
 /*
- * TRABALHO 01
+ * TRABALHO 03
  * Grupo 04:
  * Vanessa Apolinário de Lima
  * Caio Augusto da Silva Gomes
@@ -17,6 +17,7 @@
 #include "save_bits.h"
 #include "open_image.h"
 #include "vectorization.h"
+#include "dct.h"
 
 /* 
  * Comprime a imagem e salva no arquivo 
@@ -51,8 +52,8 @@ void send_blocks(struct colors color, FILE* file){
                         blue[i%8][j%8] = color.blue[i][j];
                     }
                 }
-                
-                vectorization_colors(ht, file, red, green, blue);
+                /*vectorization_colors(ht, file, red, green, blue);*/
+                dct_colors(ht, file, red, green, blue);
             }
         }
 
@@ -76,7 +77,8 @@ void send_blocks(struct colors color, FILE* file){
                         blue[i%8][j%8] = color.blue[i][j];
                     }
                 }
-                vectorization_colors(ht, file, red, green, blue);
+                /*vectorization_colors(ht, file, red, green, blue);*/
+                dct_colors(ht, file, red, green, blue);
             }
         }
         /* Libera a mamória da struct (que foi criada ao abrir a imagem) */
@@ -128,7 +130,8 @@ struct colors get_blocks(FILE* file){
     {
         for(offsetALT=0; offsetALT<height; offsetALT+=8)
         {
-            revert_vectorization(root, file, red, green, blue);
+            /*revert_vectorization(root, file, red, green, blue);*/
+            idct_colors(root, file, red, green, blue);
             
             for (i=offsetLARG; i<offsetLARG+8; i++)
             {

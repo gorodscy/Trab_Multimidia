@@ -1,3 +1,13 @@
+/*
+ * TRABALHO 03
+ * Grupo 04:
+ * Vanessa Apolinário de Lima
+ * Caio Augusto da Silva Gomes
+ * Fernando Cury Gorodscy
+ *
+ * Huffman
+ */
+
 #ifndef _MULTIMEDIA_HUFFMAN_H_
 #define _MULTIMEDIA_HUFFMAN_H_
 
