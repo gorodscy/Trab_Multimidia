@@ -97,7 +97,7 @@ void quantization(int mat[LIM][LIM], int quant[LIM][LIM]) {
 
 	for(i = 0; i < LIM; i++) {
 		for(j = 0; j < LIM; j++) {
-			mat[i][j] = round((float)mat[i][j]/(float)quant[i][j]);
+			mat[i][j] = round(mat[i][j]/(float)quant[i][j]);
 		}
 	}
 

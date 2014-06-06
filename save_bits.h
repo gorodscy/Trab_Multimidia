@@ -123,6 +123,7 @@ void write_byte(FILE* file, int byte, unsigned int size){
         bit = TAKE_N_BITS_FROM(byte, size-i, 1);
         write_bit(file, bit);
     }
+    printf("%d\n", byte);
 #ifdef DEBUG
     printf(" ");
 #endif

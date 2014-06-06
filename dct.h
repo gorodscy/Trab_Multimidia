@@ -216,7 +216,7 @@ void dct(unsigned char mat[LIM][LIM], int mdct[LIM][LIM]) {
 	int i, j;
 	for(i = 0; i < LIM; i++) {
 		for(j = 0; j < LIM; j++) {
-			mat2[i][j] = ((double)mat[i][j]) - 128.0;
+			mat2[i][j] = (double)(mat[i][j] - 128);
 		}
 	}
 
@@ -265,7 +265,10 @@ void idct(int mat[LIM][LIM], unsigned char midct[LIM][LIM]) {
 
 	for(i = 0; i < LIM; i++) {
 		for(j = 0; j < LIM; j++) {
-			midct[i][j] = (unsigned char)(tmp2[i][j] + 128);
+            tmp2[i][j] += 128;
+            tmp2[i][j] = tmp2[i][j] > 255 ? 255 : tmp2[i][j];
+            tmp2[i][j] = tmp2[i][j] < 0 ? 0 : tmp2[i][j];
+			midct[i][j] = (unsigned char)(tmp2[i][j]);
 		}
 	}	
 
