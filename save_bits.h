@@ -38,9 +38,7 @@ int nbits_freq(int nbits, int freq) {
 void decode_nbits_freq(int code, int* nbits, int* freq) {
     *freq = TAKE_N_BITS_FROM(code, 0, 6);
     *freq = *freq + 1;
-    *nbits = TAKE_N_BITS_FROM(code, 6, 5); 
-    /* *nbits = TAKE_N_BITS_FROM(code, 6, 3);
-    *nbits = *nbits ? *nbits : 8; */
+    *nbits = TAKE_N_BITS_FROM(code, 6, 5);
     *nbits = *nbits ? *nbits : 32;
 }
 
@@ -72,6 +70,9 @@ void getSize(FILE* file, int* width, int* height){
 int bit_size_of(int byte){
     
     int i;
+    
+    if (byte < 0) byte = -byte;
+    
     for (i=32; i>0; i--) {
         if (TAKE_N_BITS_FROM(byte, i-1, 1)) {
             return i;
@@ -81,7 +82,7 @@ int bit_size_of(int byte){
 }
 
 /*
- * Insere os bits dentro do byte para ser salvo no arquivo
+ * Insere os bits dentro do byte até completar 8 bits e o escreve no arquivo
  */
 int write_bit(FILE* file, bool bit){
     static unsigned char byte = 0x00;
@@ -113,22 +114,44 @@ void write_bit_flush(FILE* file) {
 }
 
 /*
- * Insere os bits dentro do byte até completar 8 bits e o escreve no arquivo
+ * Grava o byte no arquivo bit a bit
  */
 void write_byte(FILE* file, int byte, unsigned int size){
     int i;
     bool bit;
-
+    
+    if (byte < 0) {
+        byte = -byte;
+        write_bit(file, 1);
+    }
+    else {
+        write_bit(file, 0);
+    }
+    
     for (i=1; i<=size; i++) {
         bit = TAKE_N_BITS_FROM(byte, size-i, 1);
         write_bit(file, bit);
     }
-    printf("%d\n", byte);
 #ifdef DEBUG
     printf(" ");
 #endif
 }
 
+/*
+ * Grava o byte no arquivo bit a bit ignorando o sinal
+ */
+void write_unsigned_byte(FILE* file, int byte, unsigned int size){
+    int i;
+    bool bit;
+    
+    for (i=1; i<=size; i++) {
+        bit = TAKE_N_BITS_FROM(byte, size-i, 1);
+        write_bit(file, bit);
+    }
+#ifdef DEBUG
+    printf(" ");
+#endif
+}
 
 
 /*
@@ -158,11 +181,19 @@ bool read_bit(FILE* file){
 unsigned char read_bits(FILE* file, int qtt){
     int i;
     unsigned char byte = 0x00;
+    bool negative;
+    
+    negative = read_bit(file);
     
     for (i=0; i<qtt; i++) {
         byte <<= i?1:0;
         byte |= read_bit(file);
     }
+    
+    if (negative) {
+        byte = -byte;
+    }
+    
     return byte;
 }
 
@@ -172,11 +203,19 @@ unsigned char read_bits(FILE* file, int qtt){
 int read_bits2(FILE* file, int qtt){
     int i;
     int byte = 0;
+    bool negative;
+    
+    negative = read_bit(file);
     
     for (i=0; i<qtt; i++) {
         byte <<= i?1:0;
         byte |= read_bit(file);
     }
+    
+    if (negative) {
+        byte = -byte;
+    }
+    
     return byte;
 }
 

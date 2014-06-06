@@ -38,6 +38,6 @@ int main(int argc, char** argv)
 	    /* remonta o arquivo BMP */
 	    uncompress_image(argv[3], argv[2], img);
 	}
-
+    
     return 0;
 }

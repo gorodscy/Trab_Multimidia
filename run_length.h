@@ -54,7 +54,7 @@ void run_length(int* vet, huffman_tree_t** ht, FILE* file) {
             int cod_huffman;
             int nbitsfreq = nbits_freq(table[1][i], table[2][i]);
             buffer_t size = ht_encode(ht, buffer, nbitsfreq, &cod_huffman);
-            write_byte(file, cod_huffman, size);
+            write_unsigned_byte(file, cod_huffman, size);
             unsigned int nbits = (unsigned int) table[1][i];
             int value = table[0][i];
             write_byte(file, value, nbits);
