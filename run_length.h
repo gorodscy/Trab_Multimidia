@@ -16,7 +16,7 @@
 #include "save_bits.h"
 #include "vectorization.h"
 
-#define buffer 2049 /*512*/
+#define buffer 2048 /*512*/
 /* inicializa o vetor com as frequencias de huffman com 0 */
 buffer_t elements[buffer] = {0};
 
@@ -110,7 +110,7 @@ int* reverse_run_length(FILE* file, huffman_tree_t* root){
     while (vet_size < 64){
         ht_decode(root, &nbitsfreq, file);
         decode_nbits_freq(nbitsfreq, &nbits, &freq);
-        //nbits = nbits == 0 ? 32 : nbits;
+        nbits = nbits == 0 ? 32 : nbits;
         int value = read_bits2(file, nbits);
         
 #ifdef DEBUG_RUN_LENGTH

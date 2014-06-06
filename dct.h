@@ -265,7 +265,7 @@ void idct(int mat[LIM][LIM], unsigned char midct[LIM][LIM]) {
 
 	for(i = 0; i < LIM; i++) {
 		for(j = 0; j < LIM; j++) {
-			midct[i][j] = (unsigned char)tmp2[i][j] + 128;
+			midct[i][j] = (unsigned char)(tmp2[i][j] + 128);
 		}
 	}	
 
@@ -364,6 +364,7 @@ void dct_colors(huffman_tree_t** ht, FILE* file, unsigned char red[8][8], unsign
 	int dred[LIM][LIM], dgreen[LIM][LIM], dblue[LIM][LIM];
 	dct(red, dred);
 
+#ifdef DEBUG_DCT
 	int i, j;
 	for(i = 0; i < LIM; i++) {
 		for(j = 0; j < LIM; j++) {
@@ -371,7 +372,7 @@ void dct_colors(huffman_tree_t** ht, FILE* file, unsigned char red[8][8], unsign
 		}
 		printf("\n");
 	}
-
+#endif
 	dct(green, dgreen);
 	dct(blue, dblue);
 
@@ -384,6 +385,7 @@ void idct_colors(huffman_tree_t* root, FILE* file, unsigned char red[8][8], unsi
 
 	revert_vectorization(root, file, mred, mgreen, mblue);
 
+#ifdef DEBUG_DCT
 	int i, j;
 	for(i = 0; i < LIM; i++) {
 		for(j = 0; j < LIM; j++) {
@@ -391,7 +393,8 @@ void idct_colors(huffman_tree_t* root, FILE* file, unsigned char red[8][8], unsi
 		}
 		printf("\n");
 	}
-
+#endif
+    
 	idct(mred, red);
 	idct(mgreen, green);
 	idct(mblue, blue);

@@ -18,7 +18,7 @@
 #define TAKE_N_BITS_FROM(b, p, n) ((b) >> (p)) & ((1 << (n)) - 1)
 
 int nbits_freq(int nbits, int freq) {
-    int result = 0x00;
+    int result = 0;
     
     nbits = nbits == 32 ? 0 : nbits;
     
@@ -72,7 +72,7 @@ void getSize(FILE* file, int* width, int* height){
 int bit_size_of(int byte){
     
     int i;
-    for (i=8; i>0; i--) {
+    for (i=32; i>0; i--) {
         if (TAKE_N_BITS_FROM(byte, i-1, 1)) {
             return i;
         }
@@ -118,12 +118,7 @@ void write_bit_flush(FILE* file) {
 void write_byte(FILE* file, int byte, unsigned int size){
     int i;
     bool bit;
-/*
-    if(byte > 0)
-    	bit = TAKE_N_BITS_FROM(byte, size, 1);
-    else
-    	bit = TAKE_N_BITS_FROM(byte, size, 1);
-  */  
+
     for (i=1; i<=size; i++) {
         bit = TAKE_N_BITS_FROM(byte, size-i, 1);
         write_bit(file, bit);
@@ -133,40 +128,13 @@ void write_byte(FILE* file, int byte, unsigned int size){
 #endif
 }
 
-/*
- * Escreve os valores das matrizes de cores no arquivo compactado
- */
-void grava_bits(FILE* file, unsigned char red[8][8], unsigned char green[8][8], unsigned char blue[8][8]){
-    
-    unsigned int i, j;
-    
-    for (i=0; i<8; i++) {
-        for (j=0; j<8; j++) {
-#ifdef DEBUG
-            printf("R:%d G:%d B:%d - ", red[i][j], green[i][j], blue[i][j]);
-#endif
-            
-            unsigned int size = bit_size_of(red[i][j]);
-            write_byte(file, size-1, 3); /* - Escreve ultimos 3 bits no arquivo */
-            write_byte(file, red[i][j], size); /* - Escreve ultimos size bits de red[i][j] */
-            
-            size = bit_size_of(green[i][j]);
-            write_byte(file, size-1, 3); /* - Escreve ultimos 3 bits no arquivo */
-            write_byte(file, green[i][j], size); /* - Escreve ultimos size bits de green[i][j] */
-            
-            size = bit_size_of(blue[i][j]);
-            write_byte(file, size-1, 3); /* - Escreve ultimos 3 bits no arquivo */
-            write_byte(file, blue[i][j], size); /* - Escreve ultimos size bits de blue[i][j] */
-        }
-    }
-}
+
 
 /*
  * Le cada bit do arquivo compactado
  */
 bool read_bit(FILE* file){
     static int pos=7;
-    //static unsigned char byte;
     static int byte;
     bool bit;
     
@@ -202,7 +170,7 @@ unsigned char read_bits(FILE* file, int qtt){
  */
 int read_bits2(FILE* file, int qtt){
     int i;
-    int byte = 0x00;
+    int byte = 0;
     
     for (i=0; i<qtt; i++) {
         byte <<= i?1:0;
@@ -211,35 +179,6 @@ int read_bits2(FILE* file, int qtt){
     return byte;
 }
 
-/*
- * Le as matrizes 8x8 do arquivo compactado
- */
-void read_matrix(FILE* file, unsigned char red[8][8], unsigned char green[8][8], unsigned char blue[8][8]){
-    
-    unsigned int i, j;
-    int size;
-    
-    for (i=0; i<8; i++) {
-        for (j=0; j<8; j++) {
-            
-            //size = read_bits(file, 3);
-            size = read_bits(file, 5);
-            red[i][j] = read_bits(file, size+1);
-            
-            //size = read_bits(file, 3);
-            size = read_bits(file, 5);
-            green[i][j] = read_bits(file, size+1);
-            
-            //size = read_bits(file, 3);
-            size = read_bits(file, 5);
-            blue[i][j] = read_bits(file, size+1);
-            
-#ifdef DEBUG2
-            printf("R:%d G:%d B:%d - ", red[i][j], green[i][j], blue[i][j]);
-#endif
-            
-        }
-    }
-}
+
 
 #endif

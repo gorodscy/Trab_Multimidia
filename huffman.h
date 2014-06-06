@@ -16,7 +16,7 @@
 #define HUFFMAN_TYPE_NODE 0
 #define HUFFMAN_TYPE_LEAF 1
 
-typedef unsigned short int buffer_t;
+typedef int buffer_t;
 
 typedef struct _huffman_tree_t {
 	int count;								/* quantidade de occorencias do no */
